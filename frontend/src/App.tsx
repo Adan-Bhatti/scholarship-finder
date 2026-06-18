@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { Onboarding } from './pages/Onboarding';
 import { Dashboard } from './pages/Dashboard';
 import { Saved } from './pages/Saved';
+import { ProfileView } from './pages/ProfileView';
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <Route path="/onboarding" element={<Onboarding />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/saved" element={<Saved />} />
+        <Route path="/profile" element={<ProfileView />} />
         {/* Redirect root to onboarding for now */}
         <Route path="/" element={<Navigate to="/onboarding" replace />} />
       </Routes>
@@ -19,5 +21,6 @@ function App() {
 }
 
 export default App;
+
 
 
