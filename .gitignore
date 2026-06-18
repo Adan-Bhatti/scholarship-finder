@@ -30,3 +30,13 @@ venv.bak/
 
 # Docker
 docker-compose.override.yml
+
+# Database
+*.sqlite3
+*.db
+*.db-journal
+alembic.ini.bak
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
