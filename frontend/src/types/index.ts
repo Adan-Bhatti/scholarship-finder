@@ -23,3 +23,34 @@ export interface User {
   email: string;
   created_at: string;
 }
+
+export interface Scholarship {
+  id: string;
+  title: string;
+  provider: string;
+  amount_min?: number;
+  amount_max?: number;
+  currency?: string;
+  deadline?: string;
+  renewable?: boolean;
+  degree_levels?: string[];
+  fields_of_study?: string[];
+  eligible_nationalities?: string[];
+  eligible_countries?: string[];
+  gpa_requirement?: number;
+  income_requirement?: string;
+  description?: string;
+  eligibility_text?: string;
+  requirements?: string[];
+  benefits?: string[];
+  application_url?: string;
+  source_url?: string;
+  source_name?: string;
+  created_at: string;
+  last_scraped_at?: string;
+}
+
+export interface MatchResult {
+  scholarship: Scholarship;
+  match_score: number;
+}
