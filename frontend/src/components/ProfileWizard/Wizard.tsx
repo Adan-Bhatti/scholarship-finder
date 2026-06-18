@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { StepAcademic } from './StepAcademic';
 import { StepDemographic } from './StepDemographic';
 import { StepFinancial } from './StepFinancial';
@@ -10,6 +11,7 @@ export function Wizard() {
   const [step, setStep] = useState(1);
   const [data, setData] = useState<Partial<ProfileCreate>>({});
   const { createProfile } = useProfile();
+  const navigate = useNavigate();
   
   const updateData = (newData: any) => setData({ ...data, ...newData });
 
@@ -19,8 +21,7 @@ export function Wizard() {
   const handleSubmit = async () => {
     try {
       await createProfile(data as ProfileCreate);
-      alert('Profile created successfully!');
-      // TODO: Redirect to Dashboard
+      navigate('/dashboard');
     } catch (err) {
       alert('Failed to save profile');
     }
