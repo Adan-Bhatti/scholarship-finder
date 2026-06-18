@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { BookmarkIcon, ExternalLinkIcon, CheckCircleIcon } from 'lucide-react';
+import { BookmarkIcon, ExternalLinkIcon } from 'lucide-react';
 import { Scholarship, MatchResult } from '../../types';
 import { saveScholarship, unsaveScholarship } from '../../api/scholarships';
+import { formatCurrency } from '../../utils/currency';
+import { formatDate } from '../../utils/date';
 
 interface ScholarshipCardProps {
   match: MatchResult;
@@ -32,13 +34,8 @@ export function ScholarshipCard({ match, isSavedInitial = false, onUpdate }: Sch
     }
   };
 
-  const formattedAmount = scholarship.amount_max 
-    ? new Intl.NumberFormat('en-US', { style: 'currency', currency: scholarship.currency || 'USD' }).format(scholarship.amount_max)
-    : 'Varies';
-
-  const formattedDeadline = scholarship.deadline 
-    ? new Date(scholarship.deadline).toLocaleDateString() 
-    : 'Rolling / Varies';
+  const formattedAmount = formatCurrency(scholarship.amount_max, scholarship.currency);
+  const formattedDeadline = formatDate(scholarship.deadline);
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
