@@ -1,6 +1,6 @@
 import React from 'react';
 import { Sidebar } from '../components/Dashboard/Sidebar';
-import { useProfile } from '../api/profile'; // Or hooks/useProfile depending on export
+import { useProfile } from '../hooks/useProfile';
 import { Profile } from '../types';
 
 export function ProfileView() {

@@ -50,7 +50,7 @@ export function StepExtracurriculars({ data, updateData }: StepExtracurricularsP
           </button>
         </div>
         <div className="mt-2 flex flex-wrap gap-2">
-          {(data.extracurriculars || []).map((item: str, idx: number) => (
+          {(data.extracurriculars || []).map((item: string, idx: number) => (
             <span key={idx} className="bg-gray-200 text-gray-800 text-sm px-3 py-1 rounded-full">
               {item}
             </span>
@@ -78,7 +78,7 @@ export function StepExtracurriculars({ data, updateData }: StepExtracurricularsP
           </button>
         </div>
         <div className="mt-2 flex flex-wrap gap-2">
-          {(data.target_destinations || []).map((item: str, idx: number) => (
+          {(data.target_destinations || []).map((item: string, idx: number) => (
             <span key={idx} className="bg-gray-200 text-gray-800 text-sm px-3 py-1 rounded-full">
               {item}
             </span>
