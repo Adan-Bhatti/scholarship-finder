@@ -13,3 +13,18 @@ apiClient.interceptors.request.use((config) => {
   }
   return config;
 });
+
+// Add a response interceptor to handle 401s globally
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      // Clear token and redirect to login/onboarding
+      localStorage.removeItem('token');
+      if (window.location.pathname !== '/onboarding') {
+        window.location.href = '/onboarding';
+      }
+    }
+    return Promise.reject(error);
+  }
+);
