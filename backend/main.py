@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from backend.routers import auth, profile, scholarships
+from backend.routers import auth, profile, scholarships, health
 
 app = FastAPI(
     title="Scholarship Finder AI",
@@ -7,17 +7,10 @@ app = FastAPI(
     version="1.0.0",
 )
 
+app.include_router(health.router)
 app.include_router(auth.router)
 app.include_router(profile.router)
 app.include_router(scholarships.router)
-
-@app.get("/")
-def read_root():
-    return {"message": "Welcome to Scholarship Finder AI"}
-
-@app.get("/health")
-def health_check():
-    return {"status": "ok"}
 
 
 
