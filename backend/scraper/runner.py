@@ -18,6 +18,11 @@ def run_all_spiders():
     process.crawl('fastweb')
     process.crawl('scholarships_com')
     process.crawl('hec')
+    process.crawl('chevening')
+    process.crawl('fulbright')
+    process.crawl('daad')
+    process.crawl('bold')
+    process.crawl('careeronestop')
     
     process.start()
 
