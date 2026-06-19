@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { XIcon, SparklesIcon, CheckCircleIcon, ExternalLinkIcon } from 'lucide-react';
-import { Scholarship } from '../../types';
-import { AIExplanation, getScholarshipExplanation } from '../../api/ai';
+import type { Scholarship } from '../../types';
+import { getScholarshipExplanation } from '../../api/ai';
+import type { AIExplanation } from '../../api/ai';
 import { formatCurrency } from '../../utils/currency';
 import { formatDate } from '../../utils/date';
 
