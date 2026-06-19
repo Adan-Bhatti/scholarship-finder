@@ -54,3 +54,20 @@ export interface MatchResult {
   scholarship: Scholarship;
   match_score: number;
 }
+
+export type ApplicationStatus = 
+  | 'Saved'
+  | 'Drafting'
+  | 'Submitted'
+  | 'Result Pending'
+  | 'Won'
+  | 'Rejected';
+
+export interface SavedScholarship {
+  id: string;
+  scholarship: Scholarship;
+  status: ApplicationStatus;
+  notes?: string;
+  saved_at: string;
+  updated_at: string;
+}
