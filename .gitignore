@@ -1,42 +1,110 @@
-# OS
+# ─────────────────────────────────────────────────────────
+# Scholarship Finder AI — .gitignore
+# ─────────────────────────────────────────────────────────
+
+# ── Operating System ──────────────────────────────────────
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
+desktop.ini
 
-# Node
-node_modules/
-dist/
-dist-ssr/
-*.local
-
-# Python
+# ── Python ────────────────────────────────────────────────
 __pycache__/
 *.py[cod]
 *$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/
+lib64/
+*.manifest
+*.spec
+
+# ── Virtual Environments ──────────────────────────────────
 .env
 .venv
-env/
 venv/
 ENV/
+env/
 env.bak/
 venv.bak/
 
-# Environment Variables
-.env
+# ── Environment Variables ─────────────────────────────────
 .env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# IDE
-.vscode/
-.idea/
+# ── Testing & Coverage ────────────────────────────────────
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+*.cover
+.hypothesis/
+nosetests.xml
+test-results/
 
-# Docker
-docker-compose.override.yml
+# ── Node / Frontend ───────────────────────────────────────
+node_modules/
+frontend/dist/
+frontend/dist-ssr/
+*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.eslintcache
 
-# Database
+# ── Database ──────────────────────────────────────────────
 *.sqlite3
 *.db
 *.db-journal
-alembic.ini.bak
 
-# Celery
+# ── Celery ────────────────────────────────────────────────
 celerybeat-schedule
 celerybeat.pid
+celerybeat-schedule.db
+
+# ── IDE & Editors ─────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# ── Docker ────────────────────────────────────────────────
+docker-compose.override.yml
+
+# ── Logs ─────────────────────────────────────────────────
+*.log
+logs/
+log/
+
+# ── Scrapy ───────────────────────────────────────────────
+.scrapy/
+
+# ── Alembic ──────────────────────────────────────────────
+alembic.ini.bak
+
+# ── Build artifacts ───────────────────────────────────────
+*.pyc
+*.pyo
