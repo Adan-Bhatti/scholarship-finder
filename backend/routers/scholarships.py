@@ -8,7 +8,7 @@ from backend.models.user import User
 from backend.models.profile import Profile
 from backend.models.scholarship import Scholarship
 from backend.models.saved import SavedScholarship
-from backend.schemas.scholarship import MatchResponse, ScholarshipResponse
+from backend.schemas.scholarship import MatchResponse, ScholarshipResponse, SavedScholarshipResponse, SavedScholarshipUpdate
 from backend.routers.auth import get_current_user
 from backend.core.matcher import ScholarshipMatcher
 
@@ -48,7 +48,8 @@ def save_scholarship(scholarship_id: uuid.UUID, current_user: User = Depends(get
         
     new_save = SavedScholarship(
         user_id=current_user.id,
-        scholarship_id=scholarship_id
+        scholarship_id=scholarship_id,
+        status="Saved"
     )
     db.add(new_save)
     db.commit()
@@ -68,10 +69,26 @@ def unsave_scholarship(scholarship_id: uuid.UUID, current_user: User = Depends(g
     db.commit()
     return {"message": "Scholarship unsaved successfully"}
 
-@router.get("/saved", response_model=List[ScholarshipResponse])
+@router.get("/saved", response_model=List[SavedScholarshipResponse])
 def get_saved_scholarships(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     saved = db.query(SavedScholarship).filter(SavedScholarship.user_id == current_user.id).all()
-    scholarship_ids = [s.scholarship_id for s in saved]
+    return saved
+
+@router.patch("/{scholarship_id}/saved")
+def update_saved_scholarship(scholarship_id: uuid.UUID, update_data: SavedScholarshipUpdate, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    saved = db.query(SavedScholarship).filter(
+        SavedScholarship.user_id == current_user.id,
+        SavedScholarship.scholarship_id == scholarship_id
+    ).first()
     
-    scholarships = db.query(Scholarship).filter(Scholarship.id.in_(scholarship_ids)).all()
-    return scholarships
+    if not saved:
+        raise HTTPException(status_code=404, detail="Saved scholarship not found")
+        
+    if update_data.status is not None:
+        saved.status = update_data.status
+    if update_data.notes is not None:
+        saved.notes = update_data.notes
+        
+    db.commit()
+    db.refresh(saved)
+    return saved

@@ -36,3 +36,18 @@ class ScholarshipResponse(ScholarshipBase):
 class MatchResponse(BaseModel):
     scholarship: ScholarshipResponse
     match_score: float
+
+class SavedScholarshipUpdate(BaseModel):
+    status: Optional[str] = None
+    notes: Optional[str] = None
+
+class SavedScholarshipResponse(BaseModel):
+    id: uuid.UUID
+    scholarship: ScholarshipResponse
+    status: str
+    notes: Optional[str] = None
+    saved_at: datetime
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True
