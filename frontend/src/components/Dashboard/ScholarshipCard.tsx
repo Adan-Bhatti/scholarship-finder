@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BookmarkIcon, ExternalLinkIcon, EyeIcon } from 'lucide-react';
-import { Scholarship, MatchResult } from '../../types';
+import type { Scholarship, MatchResult } from '../../types';
 import { saveScholarship, unsaveScholarship } from '../../api/scholarships';
 import { formatCurrency } from '../../utils/currency';
 import { formatDate } from '../../utils/date';
@@ -10,9 +10,10 @@ interface ScholarshipCardProps {
   match: MatchResult;
   isSavedInitial?: boolean;
   onUpdate?: () => void;
+  savedNotes?: string;
 }
 
-export function ScholarshipCard({ match, isSavedInitial = false, onUpdate }: ScholarshipCardProps) {
+export function ScholarshipCard({ match, isSavedInitial = false, onUpdate, savedNotes }: ScholarshipCardProps) {
   const [isSaved, setIsSaved] = useState(isSavedInitial);
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -86,6 +87,12 @@ export function ScholarshipCard({ match, isSavedInitial = false, onUpdate }: Sch
               </span>
             ))}
           </div>
+
+          {savedNotes && (
+            <div className="mb-4 bg-yellow-50 border-l-4 border-yellow-400 p-3 rounded-r-md">
+              <p className="text-sm text-yellow-800 italic">"{savedNotes}"</p>
+            </div>
+          )}
 
           <div className="pt-4 border-t border-gray-100 flex items-center justify-between">
             <button 

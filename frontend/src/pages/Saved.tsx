@@ -120,6 +120,7 @@ export function Saved() {
                           match={{ scholarship: item.scholarship, match_score: 100 }} 
                           isSavedInitial={true}
                           onUpdate={fetchSaved}
+                          savedNotes={item.notes}
                         />
                       </div>
                     ))}
