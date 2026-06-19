@@ -122,6 +122,19 @@ export function Saved() {
                           onUpdate={fetchSaved}
                           savedNotes={item.notes}
                         />
+                        <div className="mt-2 text-right">
+                           <button 
+                             onClick={() => {
+                               const newNote = prompt("Add a note for this application:", item.notes || "");
+                               if (newNote !== null) {
+                                 updateSavedStatus(item.scholarship.id, item.status, newNote).then(fetchSaved);
+                               }
+                             }}
+                             className="text-xs text-indigo-600 hover:text-indigo-800"
+                           >
+                             {item.notes ? 'Edit Note' : '+ Add Note'}
+                           </button>
+                        </div>
                       </div>
                     ))}
                     {getItemsByStatus(status).length === 0 && (
