@@ -39,6 +39,7 @@
 |---|---|
 | 🕷️ **Automated Web Scraping** | Scrapy + Playwright spiders crawl 8+ scholarship databases on a nightly Celery beat schedule |
 | 🤖 **AI Match Explainer** | Anthropic Claude 3 generates a custom 2-3 sentence fit analysis + 5-step checklist per scholarship |
+| 🔍 **Scholarship Explorer** | Real-time debounced search to filter scholarships by country, degree, keyword, and amount |
 | 📊 **Analytics Dashboard** | Live stats: total matches, expiring deadlines, and total potential funding |
 | 📋 **Kanban Application Tracker** | Drag-and-drop board to move scholarships through `Saved → Drafting → Submitted → Won/Rejected` |
 | 🔐 **JWT Authentication** | Secure register/login with hashed passwords and Bearer token auth |
