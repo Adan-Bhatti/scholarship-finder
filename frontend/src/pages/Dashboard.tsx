@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import { Sidebar } from '../components/Dashboard/Sidebar';
 import { ScholarshipCard } from '../components/Dashboard/ScholarshipCard';
 import { getMatches, getSavedScholarships } from '../api/scholarships';
@@ -29,7 +30,9 @@ export function Dashboard() {
         setSavedIds(new Set(savedData.map(s => s.scholarship?.id || s.id)));
         setStats(statsData);
       } catch (err: any) {
-        setError(err.message || 'Failed to load dashboard data');
+        const msg = err?.response?.data?.detail || err.message || 'Failed to load dashboard data';
+        setError(msg);
+        toast.error(msg);
       } finally {
         setLoading(false);
       }

@@ -78,9 +78,22 @@ export function DetailModal({ scholarship, onClose }: DetailModalProps) {
             </div>
             <div className="p-6">
               {loading ? (
-                <div className="flex flex-col items-center justify-center py-6">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mb-4"></div>
-                  <p className="text-indigo-600 font-medium">Analyzing your profile match...</p>
+                <div className="animate-pulse space-y-4">
+                  <div className="flex items-center mb-3">
+                    <div className="h-4 w-4 bg-indigo-200 rounded-full mr-2" />
+                    <div className="h-3 w-48 bg-indigo-200 rounded" />
+                  </div>
+                  <div className="h-4 bg-indigo-100 rounded w-full" />
+                  <div className="h-4 bg-indigo-100 rounded w-5/6" />
+                  <div className="h-4 bg-indigo-100 rounded w-4/6" />
+                  <div className="mt-4 space-y-2">
+                    {[1, 2, 3].map(i => (
+                      <div key={i} className="flex items-center">
+                        <div className="w-6 h-6 bg-indigo-200 rounded-full mr-3 flex-shrink-0" />
+                        <div className="h-3 bg-indigo-100 rounded w-3/4" />
+                      </div>
+                    ))}
+                  </div>
                 </div>
               ) : error ? (
                 <p className="text-red-500">{error}</p>
