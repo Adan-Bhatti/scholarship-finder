@@ -11,8 +11,62 @@ from backend.models.saved import SavedScholarship
 from backend.schemas.scholarship import MatchResponse, ScholarshipResponse, SavedScholarshipResponse, SavedScholarshipUpdate
 from backend.routers.auth import get_current_user
 from backend.core.matcher import ScholarshipMatcher
+from sqlalchemy import or_
+from typing import Optional
 
 router = APIRouter(prefix="/scholarships", tags=["scholarships"])
+
+@router.get("/search", response_model=dict)
+def search_scholarships(
+    q: Optional[str] = None,
+    degree: Optional[str] = None,
+    country: Optional[str] = None,
+    min_amount: Optional[float] = None,
+    max_amount: Optional[float] = None,
+    page: int = 1,
+    limit: int = 20,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    query = db.query(Scholarship).filter(Scholarship.is_active == True)
+    
+    if q:
+        search_filter = or_(
+            Scholarship.title.ilike(f"%{q}%"),
+            Scholarship.provider.ilike(f"%{q}%"),
+            Scholarship.description.ilike(f"%{q}%")
+        )
+        query = query.filter(search_filter)
+        
+    # Note: SQLite in tests doesn't support array operators like any() easily
+    # We will do simple string matching for arrays since it's JSON encoded in SQLite
+    # but for postgres it's an ARRAY. We'll use cast to String for cross-compatibility in this simple search.
+    from sqlalchemy import cast, String
+    
+    if degree:
+        query = query.filter(cast(Scholarship.degree_levels, String).ilike(f"%{degree}%"))
+        
+    if country:
+        query = query.filter(cast(Scholarship.eligible_countries, String).ilike(f"%{country}%"))
+        
+    if min_amount is not None:
+        query = query.filter(Scholarship.amount_max >= min_amount)
+        
+    if max_amount is not None:
+        query = query.filter(Scholarship.amount_min <= max_amount)
+        
+    total_count = query.count()
+    
+    start = (page - 1) * limit
+    results = query.order_by(Scholarship.created_at.desc()).offset(start).limit(limit).all()
+    
+    return {
+        "total": total_count,
+        "page": page,
+        "limit": limit,
+        "data": [ScholarshipResponse.model_validate(r).model_dump() for r in results]
+    }
+
 
 @router.get("/matches", response_model=List[MatchResponse])
 def get_matches(
