@@ -15,22 +15,24 @@ from backend.core.matcher import ScholarshipMatcher
 router = APIRouter(prefix="/scholarships", tags=["scholarships"])
 
 @router.get("/matches", response_model=List[MatchResponse])
-def get_matches(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+def get_matches(
+    page: int = 1,
+    limit: int = 20,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
     profile = db.query(Profile).filter(Profile.user_id == current_user.id).first()
     if not profile:
         raise HTTPException(status_code=400, detail="Profile not created yet. Please complete onboarding.")
-        
-    all_scholarships = db.query(Scholarship).all()
-    
+
+    all_scholarships = db.query(Scholarship).filter(Scholarship.is_active == True).all()
     matches = ScholarshipMatcher.match_all(profile, all_scholarships)
-    
-    response = []
-    for s, score in matches:
-        response.append(MatchResponse(
-            scholarship=s,
-            match_score=score
-        ))
-    return response
+
+    # Paginate results
+    start = (page - 1) * limit
+    paginated = matches[start: start + limit]
+
+    return [MatchResponse(scholarship=s, match_score=score) for s, score in paginated]
 
 @router.post("/{scholarship_id}/save")
 def save_scholarship(scholarship_id: uuid.UUID, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
