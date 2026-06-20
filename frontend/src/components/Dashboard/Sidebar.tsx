@@ -1,16 +1,24 @@
 import React from 'react';
-import { HomeIcon, BookmarkIcon, UserIcon, LogOutIcon } from 'lucide-react';
+import { HomeIcon, BookmarkIcon, UserIcon, LogOutIcon, SearchIcon } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
-export function Sidebar() {
+function NavItem({ to, icon, label }: { to: string; icon: React.ReactNode; label: string }) {
   const location = useLocation();
+  const isActive = location.pathname === to;
+  return (
+    <Link 
+      to={to}
+      className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
+        isActive ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+      }`}
+    >
+      <div className="mr-3">{icon}</div>
+      <span className="font-medium">{label}</span>
+    </Link>
+  );
+}
 
-  const navItems = [
-    { name: 'Dashboard', path: '/dashboard', icon: HomeIcon },
-    { name: 'Saved', path: '/saved', icon: BookmarkIcon },
-    { name: 'Profile', path: '/profile', icon: UserIcon },
-  ];
-
+export function Sidebar() {
   const handleLogout = () => {
     localStorage.removeItem('token');
     window.location.href = '/onboarding';
@@ -25,21 +33,10 @@ export function Sidebar() {
       </div>
       
       <nav className="flex-1 px-4 space-y-2 mt-8">
-        {navItems.map((item) => {
-          const isActive = location.pathname === item.path;
-          return (
-            <Link 
-              key={item.name}
-              to={item.path}
-              className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
-                isActive ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white'
-              }`}
-            >
-              <item.icon size={20} className="mr-3" />
-              <span className="font-medium">{item.name}</span>
-            </Link>
-          );
-        })}
+        <NavItem to="/dashboard" icon={<HomeIcon size={20} />} label="Dashboard" />
+        <NavItem to="/explore" icon={<SearchIcon size={20} />} label="Explore" />
+        <NavItem to="/saved" icon={<BookmarkIcon size={20} />} label="Saved" />
+        <NavItem to="/profile" icon={<UserIcon size={20} />} label="Profile" />
       </nav>
 
       <div className="p-4 border-t border-slate-800">
