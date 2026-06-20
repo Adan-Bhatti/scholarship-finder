@@ -4,6 +4,7 @@ import { Toaster } from 'react-hot-toast';
 import { AuthPage } from './pages/AuthPage';
 import { Onboarding } from './pages/Onboarding';
 import { Dashboard } from './pages/Dashboard';
+import { Explorer } from './pages/Explorer';
 import { Saved } from './pages/Saved';
 import { ProfileView } from './pages/ProfileView';
 import { NotFound } from './pages/NotFound';
@@ -46,6 +47,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/explore"
+          element={
+            <ProtectedRoute>
+              <Explorer />
             </ProtectedRoute>
           }
         />
