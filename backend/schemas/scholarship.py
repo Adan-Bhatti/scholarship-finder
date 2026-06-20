@@ -1,7 +1,7 @@
 from typing import List, Optional
 from datetime import datetime
 import uuid
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 class ScholarshipBase(BaseModel):
     title: str
@@ -26,12 +26,11 @@ class ScholarshipBase(BaseModel):
     source_name: Optional[str] = None
 
 class ScholarshipResponse(ScholarshipBase):
+    model_config = ConfigDict(from_attributes=True)
+
     id: uuid.UUID
     created_at: datetime
     last_scraped_at: Optional[datetime] = None
-
-    class Config:
-        from_attributes = True
 
 class MatchResponse(BaseModel):
     scholarship: ScholarshipResponse
@@ -42,12 +41,11 @@ class SavedScholarshipUpdate(BaseModel):
     notes: Optional[str] = None
 
 class SavedScholarshipResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: uuid.UUID
     scholarship: ScholarshipResponse
     status: str
     notes: Optional[str] = None
     saved_at: datetime
     updated_at: datetime
-
-    class Config:
-        from_attributes = True

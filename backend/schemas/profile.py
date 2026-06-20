@@ -1,7 +1,7 @@
 import uuid
 from typing import List, Optional
 from datetime import datetime
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 class ProfileBase(BaseModel):
     degree_level: Optional[str] = None
@@ -23,9 +23,8 @@ class ProfileUpdate(ProfileBase):
     pass
 
 class ProfileResponse(ProfileBase):
+    model_config = ConfigDict(from_attributes=True)
+
     id: uuid.UUID
     user_id: uuid.UUID
     updated_at: datetime
-
-    class Config:
-        from_attributes = True
