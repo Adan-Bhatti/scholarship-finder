@@ -21,6 +21,7 @@ class Settings(BaseSettings):
 
     # AI
     ANTHROPIC_API_KEY: str = ""
+    GROQ_API_KEY: str = ""
 
     # Scraper
     PLAYWRIGHT_HEADLESS: bool = True
