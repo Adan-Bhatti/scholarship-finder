@@ -21,7 +21,7 @@ function NavItem({ to, icon, label }: { to: string; icon: React.ReactNode; label
 export function Sidebar() {
   const handleLogout = () => {
     localStorage.removeItem('token');
-    window.location.href = '/onboarding';
+    window.location.href = '/';
   };
 
   return (
