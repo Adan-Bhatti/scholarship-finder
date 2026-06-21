@@ -20,7 +20,6 @@ class Settings(BaseSettings):
     CELERY_RESULT_BACKEND: str = "redis://localhost:6379/0"
 
     # AI
-    ANTHROPIC_API_KEY: str = ""
     GROQ_API_KEY: str = ""
 
     # Scraper
