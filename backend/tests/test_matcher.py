@@ -72,3 +72,23 @@ def test_matcher_degree_level_disqualification():
     matches = ScholarshipMatcher.match_all(profile_ok, [scholarship])
     assert len(matches) == 1
 
+
+def test_matcher_max_sources_filtering():
+    # Setup profile with max_sources = 2
+    profile = Profile(degree_level="Undergraduate", gpa=3.8, max_sources=2)
+    
+    # 4 scholarships from 3 different sources
+    s1 = Scholarship(degree_levels=["Undergraduate"], source_name="Source A")
+    s2 = Scholarship(degree_levels=["Undergraduate"], source_name="Source B")
+    s3 = Scholarship(degree_levels=["Undergraduate"], source_name="Source C")
+    s4 = Scholarship(degree_levels=["Undergraduate"], source_name="Source A")
+    
+    matches = ScholarshipMatcher.match_all(profile, [s1, s2, s3, s4])
+    matched_scholarships = [m[0] for m in matches]
+    
+    assert s1 in matched_scholarships
+    assert s2 in matched_scholarships
+    assert s4 in matched_scholarships
+    assert s3 not in matched_scholarships
+
+
