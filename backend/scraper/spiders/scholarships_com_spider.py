@@ -1,4 +1,4 @@
-from scraper.base_spider import BaseScholarshipSpider
+from backend.scraper.base_spider import BaseScholarshipSpider
 
 class ScholarshipsComSpider(BaseScholarshipSpider):
     name = "scholarships_com"

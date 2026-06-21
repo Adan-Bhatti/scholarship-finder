@@ -5,6 +5,9 @@ class DedupPipeline:
         self.seen_scholarships = set()
 
     def process_item(self, item, spider):
+        if hasattr(spider, 'normalize_item'):
+            item = spider.normalize_item(item)
+            
         # Deduplication key based on title and provider
         title = item.get('title', '').lower().strip()
         provider = item.get('provider', '').lower().strip()

@@ -1,5 +1,5 @@
 import scrapy
-from backend.scraper.spiders.base_spider import BaseScholarshipSpider
+from backend.scraper.base_spider import BaseScholarshipSpider
 
 class CareerOneStopSpider(BaseScholarshipSpider):
     name = "careeronestop"

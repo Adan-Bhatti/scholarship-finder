@@ -2,9 +2,9 @@ import scrapy
 from datetime import datetime
 from typing import Dict, Any
 
-from scraper.items import ScholarshipItem
-from scraper.parsers.amount_parser import parse_amount
-from scraper.parsers.deadline_parser import parse_deadline
+from backend.scraper.items import ScholarshipItem
+from backend.scraper.parsers.amount_parser import parse_amount
+from backend.scraper.parsers.deadline_parser import parse_deadline
 
 class BaseScholarshipSpider(scrapy.Spider):
     """
@@ -23,14 +23,33 @@ class BaseScholarshipSpider(scrapy.Spider):
         
         # Amount parsing
         amount_text = raw_data.get('amount_text', '')
-        min_amt, max_amt = parse_amount(amount_text)
-        item['amount_min'] = min_amt
-        item['amount_max'] = max_amt
-        item['currency'] = "USD"
+        if amount_text:
+            min_amt, max_amt = parse_amount(amount_text)
+            item['amount_min'] = min_amt
+            item['amount_max'] = max_amt
+        else:
+            item['amount_min'] = raw_data.get('amount_min')
+            item['amount_max'] = raw_data.get('amount_max')
+            
+        item['currency'] = raw_data.get('currency', "USD")
         
         # Deadline parsing
         deadline_text = raw_data.get('deadline_text', '')
-        item['deadline'] = parse_deadline(deadline_text)
+        if deadline_text:
+            item['deadline'] = parse_deadline(deadline_text)
+        else:
+            deadline_val = raw_data.get('deadline')
+            if isinstance(deadline_val, str):
+                item['deadline'] = parse_deadline(deadline_val)
+            else:
+                item['deadline'] = deadline_val
+        
+        # Additional fields
+        item['renewable'] = raw_data.get('renewable', False)
+        item['gpa_requirement'] = raw_data.get('gpa_requirement')
+        item['income_requirement'] = raw_data.get('income_requirement')
+        item['eligibility_text'] = raw_data.get('eligibility_text', '').strip()
+        item['benefits'] = raw_data.get('benefits', '').strip() if raw_data.get('benefits') else None
         
         # Defaults for structured data arrays
         item['degree_levels'] = raw_data.get('degree_levels', [])

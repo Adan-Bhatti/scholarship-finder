@@ -4,7 +4,7 @@ from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
 
 # Make sure Scrapy can find our settings
-os.environ.setdefault('SCRAPY_SETTINGS_MODULE', 'scraper.settings')
+os.environ.setdefault('SCRAPY_SETTINGS_MODULE', 'backend.scraper.settings')
 
 def run_all_spiders():
     """

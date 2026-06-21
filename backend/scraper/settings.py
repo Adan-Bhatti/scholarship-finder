@@ -5,8 +5,8 @@ load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env"))
 
 BOT_NAME = 'scholarship_finder'
 
-SPIDER_MODULES = ['scraper.spiders']
-NEWSPIDER_MODULE = 'scraper.spiders'
+SPIDER_MODULES = ['backend.scraper.spiders']
+NEWSPIDER_MODULE = 'backend.scraper.spiders'
 
 USER_AGENT = os.environ.get("SCRAPER_USER_AGENT", "Mozilla/5.0 (compatible; ScholarshipBot/1.0)")
 ROBOTSTXT_OBEY = True
@@ -17,8 +17,8 @@ DOWNLOAD_DELAY = 2
 CONCURRENT_REQUESTS_PER_DOMAIN = 8
 
 ITEM_PIPELINES = {
-   'scraper.pipelines.dedup_pipeline.DedupPipeline': 300,
-   'scraper.pipelines.db_pipeline.DatabasePipeline': 400,
+   'backend.scraper.pipelines.dedup_pipeline.DedupPipeline': 300,
+   'backend.scraper.pipelines.db_pipeline.DatabasePipeline': 400,
 }
 
 # Playwright settings (enabled for JS-rendered sites)

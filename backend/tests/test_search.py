@@ -4,12 +4,12 @@ def test_search_scholarships(client: TestClient):
     # First login to get token
     client.post("/auth/register", json={
         "email": "search_test@example.com",
-        "password": "strongpassword123"
+        "password": "StrongPassword123!"
     })
     
     login_res = client.post("/auth/login", data={
         "username": "search_test@example.com",
-        "password": "strongpassword123"
+        "password": "StrongPassword123!"
     })
     token = login_res.json()["access_token"]
     headers = {"Authorization": f"Bearer {token}"}
