@@ -87,6 +87,17 @@ class AIService:
 
         try:
             response = httpx.post(url, json=payload, headers=headers, timeout=15.0)
+            if response.status_code == 401:
+                logger.error("Groq API key is invalid or has been revoked. Please generate a new key at https://console.groq.com/")
+                return {
+                    "explanation": "AI explanations are unavailable: the Groq API key is invalid or has been revoked. Please update GROQ_API_KEY in backend/.env with a fresh key from https://console.groq.com/",
+                    "checklist": [
+                        "Visit the official scholarship website for full eligibility criteria.",
+                        "Ensure your GPA meets their minimum requirements.",
+                        "Prepare your transcripts and recommendation letters.",
+                        "Check application deadlines on the scholarship portal.",
+                    ]
+                }
             if response.status_code != 200:
                 logger.error(f"Groq API returned status code {response.status_code}: {response.text}")
                 return {"explanation": "Failed to generate explanation from AI provider.", "checklist": []}
