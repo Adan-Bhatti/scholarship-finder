@@ -130,4 +130,20 @@ class ScholarshipMatcher:
 
         # Sort by score descending
         results.sort(key=lambda x: x[1], reverse=True)
-        return results
+
+        # Filter by max_sources limit (unique sources), preferring sources with higher-scoring matches.
+        max_sources = getattr(profile, "max_sources", 5)
+        if max_sources is None:
+            max_sources = 5
+            
+        allowed_sources = set()
+        filtered_results = []
+        for s, score in results:
+            source = s.source_name or "Unknown"
+            if source in allowed_sources:
+                filtered_results.append((s, score))
+            elif len(allowed_sources) < max_sources:
+                allowed_sources.add(source)
+                filtered_results.append((s, score))
+
+        return filtered_results
