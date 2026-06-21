@@ -43,6 +43,22 @@ export function Wizard() {
         return false;
       }
     }
+    if (currentStep === 2) {
+      if (!data.nationality || !data.nationality.trim()) {
+        setError('Nationality is required.');
+        return false;
+      }
+      if (!data.country_of_residence || !data.country_of_residence.trim()) {
+        setError('Country of residence is required.');
+        return false;
+      }
+    }
+    if (currentStep === 3) {
+      if (!data.income_bracket) {
+        setError('Income bracket is required.');
+        return false;
+      }
+    }
     return true;
   };
 
