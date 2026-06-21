@@ -1,8 +1,12 @@
+from pathlib import Path
 from pydantic_settings import BaseSettings
 from pydantic import ConfigDict
 
+# Resolve .env relative to this file so it always loads regardless of cwd
+_env_file = Path(__file__).parent.parent / ".env"
+
 class Settings(BaseSettings):
-    model_config = ConfigDict(env_file=".env", case_sensitive=True, extra="ignore")
+    model_config = ConfigDict(env_file=str(_env_file), case_sensitive=True, extra="ignore")
 
     PROJECT_NAME: str = "Scholarship Finder"
 
@@ -11,8 +15,8 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # 7 days
 
-    # Database
-    DATABASE_URL: str = "postgresql://user:password@localhost/scholarships"
+    # Database — defaults to SQLite for development; override with PostgreSQL in production
+    DATABASE_URL: str = "sqlite:///./scholarships.db"
 
     # Celery & Redis
     REDIS_URL: str = "redis://localhost:6379/0"
