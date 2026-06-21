@@ -15,6 +15,7 @@ class ProfileBase(BaseModel):
     extracurriculars: Optional[List[str]] = []
     target_destinations: Optional[List[str]] = []
     graduation_year: Optional[int] = None
+    max_sources: int = 5
 
 class ProfileCreate(ProfileBase):
     pass
