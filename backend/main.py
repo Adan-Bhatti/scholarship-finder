@@ -7,10 +7,20 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI(
     title="Scholarship Finder AI",
     description="Backend API for the AI-powered Scholarship Finder",
     version="1.0.0",
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 @app.exception_handler(BaseAPIException)
@@ -18,6 +28,27 @@ async def custom_api_exception_handler(request: Request, exc: BaseAPIException):
     return JSONResponse(
         status_code=exc.status_code,
         content={"error": exc.__class__.__name__, "detail": exc.detail},
+    )
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    errors = []
+    for error in exc.errors():
+        # Format the error location path nicely
+        loc_path = [str(x) for x in error.get("loc", []) if x != "body"]
+        loc = " -> ".join(loc_path) if loc_path else "field"
+        msg = error.get("msg", "Invalid value")
+        # Strip "Value error, " prefix from custom validation messages if present
+        if msg.startswith("Value error, "):
+            msg = msg[len("Value error, "):]
+        errors.append(f"{loc}: {msg}")
+    
+    return JSONResponse(
+        status_code=400,
+        content={
+            "error": "ValidationError",
+            "detail": "; ".join(errors)
+        }
     )
 
 @app.exception_handler(Exception)
