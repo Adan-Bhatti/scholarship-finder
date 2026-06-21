@@ -10,15 +10,54 @@ import { ProfileCreate } from '../../types';
 export function Wizard() {
   const [step, setStep] = useState(1);
   const [data, setData] = useState<Partial<ProfileCreate>>({});
+  const [error, setError] = useState<string | null>(null);
   const { createProfile } = useProfile();
   const navigate = useNavigate();
   
-  const updateData = (newData: any) => setData({ ...data, ...newData });
+  const updateData = (newData: any) => {
+    setError(null);
+    setData({ ...data, ...newData });
+  };
 
-  const nextStep = () => setStep(s => Math.min(s + 1, 4));
-  const prevStep = () => setStep(s => Math.max(s - 1, 1));
+  const validateStep = (currentStep: number): boolean => {
+    setError(null);
+    if (currentStep === 1) {
+      if (!data.degree_level) {
+        setError('Degree level is required.');
+        return false;
+      }
+      if (data.gpa === undefined || data.gpa === null || isNaN(data.gpa)) {
+        setError('GPA is required.');
+        return false;
+      }
+      if (data.gpa < 0.0 || data.gpa > 4.0) {
+        setError('GPA must be between 0.0 and 4.0.');
+        return false;
+      }
+      if (!data.graduation_year) {
+        setError('Graduation year is required.');
+        return false;
+      }
+      if (data.graduation_year < 1900 || data.graduation_year > 2100) {
+        setError('Graduation year must be between 1900 and 2100.');
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const nextStep = () => {
+    if (validateStep(step)) {
+      setStep(s => Math.min(s + 1, 4));
+    }
+  };
+  const prevStep = () => {
+    setError(null);
+    setStep(s => Math.max(s - 1, 1));
+  };
 
   const handleSubmit = async () => {
+    if (!validateStep(step)) return;
     try {
       await createProfile(data as ProfileCreate);
       navigate('/dashboard');
@@ -43,6 +82,12 @@ export function Wizard() {
           <div style={{ width: `${(step / 4) * 100}%` }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-600 transition-all duration-300"></div>
         </div>
       </div>
+
+      {error && (
+        <div className="mb-6 p-4 bg-red-50 border border-red-100 text-red-700 rounded-lg text-sm font-medium">
+          {error}
+        </div>
+      )}
 
       {step === 1 && <StepAcademic data={data} updateData={updateData} />}
       {step === 2 && <StepDemographic data={data} updateData={updateData} />}
