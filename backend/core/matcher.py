@@ -92,7 +92,7 @@ class ScholarshipMatcher:
         results = []
         for s in scholarships:
             # Hard disqualification: GPA too low
-            if s.gpa_requirement and profile.gpa and profile.gpa < s.gpa_requirement:
+            if s.gpa_requirement is not None and profile.gpa is not None and profile.gpa < s.gpa_requirement:
                 continue
 
             score = cls.calculate_score(profile, s)
