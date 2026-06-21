@@ -35,7 +35,7 @@ export function ProfileView() {
     const { name, value } = e.target;
     setProfile(prev => ({
       ...prev,
-      [name]: name === 'gpa' || name === 'graduation_year' ? Number(value) : value
+      [name]: name === 'gpa' || name === 'graduation_year' || name === 'max_sources' ? Number(value) : value
     }));
   };
 
@@ -49,8 +49,44 @@ export function ProfileView() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSaving(true);
     setMessage(null);
+
+    // Front-end validations
+    if (!profile.degree_level) {
+      setMessage({ type: 'error', text: 'Degree level is required.' });
+      return;
+    }
+    if (profile.gpa === undefined || profile.gpa === null || isNaN(profile.gpa)) {
+      setMessage({ type: 'error', text: 'GPA is required.' });
+      return;
+    }
+    if (profile.gpa < 0.0 || profile.gpa > 4.0) {
+      setMessage({ type: 'error', text: 'GPA must be between 0.0 and 4.0.' });
+      return;
+    }
+    if (!profile.graduation_year) {
+      setMessage({ type: 'error', text: 'Graduation year is required.' });
+      return;
+    }
+    if (profile.graduation_year < 1900 || profile.graduation_year > 2100) {
+      setMessage({ type: 'error', text: 'Graduation year must be between 1900 and 2100.' });
+      return;
+    }
+    const maxS = profile.max_sources !== undefined ? profile.max_sources : 5;
+    if (maxS < 1 || maxS > 50) {
+      setMessage({ type: 'error', text: 'Max sources must be between 1 and 50.' });
+      return;
+    }
+    if (!profile.nationality || !profile.nationality.trim()) {
+      setMessage({ type: 'error', text: 'Nationality is required.' });
+      return;
+    }
+    if (!profile.country_of_residence || !profile.country_of_residence.trim()) {
+      setMessage({ type: 'error', text: 'Country of residence is required.' });
+      return;
+    }
+
+    setIsSaving(true);
     try {
       // Exclude read-only fields
       const { id, user_id, updated_at, ...updateData } = profile as any;
@@ -63,8 +99,9 @@ export function ProfileView() {
         await profileApi.updateProfile(updateData);
         setMessage({ type: 'success', text: 'Profile updated successfully!' });
       }
-    } catch (err) {
-      setMessage({ type: 'error', text: 'Failed to save profile. Please try again.' });
+    } catch (err: any) {
+      const errMsg = err.response?.data?.detail || 'Failed to save profile. Please try again.';
+      setMessage({ type: 'error', text: errMsg });
     } finally {
       setIsSaving(false);
     }
@@ -124,6 +161,11 @@ export function ProfileView() {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Graduation Year</label>
                   <input type="number" name="graduation_year" value={profile.graduation_year || ''} onChange={handleChange} className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="2025" />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Max Sources to Match</label>
+                  <input type="number" name="max_sources" min="1" max="50" value={profile.max_sources !== undefined ? profile.max_sources : 5} onChange={handleChange} className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="5" />
                 </div>
 
                 <div>
