@@ -14,7 +14,7 @@ def run_all_spiders():
     settings = get_project_settings()
     process = CrawlerProcess(settings)
     
-    # In a real scenario, you could use spider names dynamically, but here we list them.
+    # Original sources
     process.crawl('fastweb')
     process.crawl('scholarships_com')
     process.crawl('hec')
@@ -23,6 +23,16 @@ def run_all_spiders():
     process.crawl('daad')
     process.crawl('bold')
     process.crawl('careeronestop')
+    # New international sources
+    process.crawl('gates_cambridge')
+    process.crawl('australia_awards')
+    process.crawl('erasmus_mundus')
+    process.crawl('rhodes')
+    process.crawl('commonwealth')
+    process.crawl('vanier')
+    process.crawl('mastercard_foundation')
+    process.crawl('aga_khan')
+    process.crawl('kaust')
     
     process.start()
 
