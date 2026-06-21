@@ -116,6 +116,14 @@ class ScholarshipMatcher:
                         if not any(uc in countries_lower for uc in user_countries):
                             continue
 
+            # Hard disqualification: Degree Level does not match
+            if s.degree_levels:
+                degrees_lower = [d.lower().strip() for d in s.degree_levels]
+                if not any(d in ("any", "all", "other") for d in degrees_lower):
+                    if profile.degree_level:
+                        if profile.degree_level.lower().strip() not in degrees_lower:
+                            continue
+
             score = cls.calculate_score(profile, s)
             if score > 20.0:
                 results.append((s, score))
