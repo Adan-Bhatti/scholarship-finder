@@ -12,12 +12,13 @@ try:
 except ImportError:
     Anthropic = None
 
+import httpx
+
 logger = logging.getLogger(__name__)
 
 class AIService:
     def __init__(self):
-        self.api_key = settings.ANTHROPIC_API_KEY
-        self.client = Anthropic(api_key=self.api_key) if Anthropic and self.api_key else None
+        self.api_key = settings.GROQ_API_KEY
 
     def _format_profile(self, profile: Profile) -> str:
         return f"""
@@ -44,13 +45,13 @@ class AIService:
 
     def generate_eligibility_explanation(self, profile: Profile, scholarship: Scholarship) -> Dict[str, Any]:
         """
-        Calls the Anthropic Claude API to generate a personalized explanation 
+        Calls the Groq completions API using llama-3.1-8b-instant to generate a personalized explanation 
         of why a user matches a scholarship, along with an action plan.
         """
-        if not self.client:
-            logger.warning("Anthropic API key not set or anthropic library missing. Returning mock explanation.")
+        if not self.api_key:
+            logger.warning("Groq API key not set. Returning mock explanation.")
             return {
-                "explanation": "AI explanations are currently disabled. Please configure your ANTHROPIC_API_KEY.",
+                "explanation": "AI explanations are currently disabled. Please configure your GROQ_API_KEY.",
                 "checklist": [
                     "Check the official website for full eligibility criteria.",
                     "Ensure your GPA meets their minimum requirements.",
@@ -74,30 +75,36 @@ class AIService:
         Respond ONLY with valid JSON.
         """
 
+        url = "https://api.groq.com/openai/v1/chat/completions"
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "model": "llama-3.1-8b-instant",
+            "messages": [
+                {"role": "system", "content": "You are a helpful API that returns strictly formatted JSON."},
+                {"role": "user", "content": prompt}
+            ],
+            "response_format": {"type": "json_object"},
+            "temperature": 0.2
+        }
+
         try:
-            response = self.client.messages.create(
-                model="claude-3-haiku-20240307",
-                max_tokens=500,
-                temperature=0.2,
-                system="You are a helpful API that returns strictly formatted JSON.",
-                messages=[
-                    {"role": "user", "content": prompt}
-                ]
-            )
+            response = httpx.post(url, json=payload, headers=headers, timeout=15.0)
+            if response.status_code != 200:
+                logger.error(f"Groq API returned status code {response.status_code}: {response.text}")
+                return {"explanation": "Failed to generate explanation from AI provider.", "checklist": []}
             
-            # The response content might contain markdown code blocks around the JSON
-            result_text = response.content[0].text
-            # Simple cleanup in case it wraps in ```json
-            result_text = result_text.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip()
-            
+            result_text = response.json()["choices"][0]["message"]["content"]
             data = json.loads(result_text)
             return data
             
-        except anthropic.APIError as e:
-            logger.error(f"Anthropic API Error: {str(e)}")
+        except httpx.HTTPError as e:
+            logger.error(f"Groq HTTP Error: {str(e)}")
             return {"explanation": "Failed to connect to AI provider.", "checklist": []}
         except json.JSONDecodeError as e:
-            logger.error(f"Failed to parse AI response as JSON: {result_text}")
+            logger.error(f"Failed to parse Groq response as JSON: {result_text}")
             return {"explanation": "AI returned malformed data.", "checklist": []}
         except Exception as e:
             logger.error(f"Unexpected AI error: {str(e)}")
