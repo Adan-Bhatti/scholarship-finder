@@ -95,6 +95,14 @@ class ScholarshipMatcher:
             if s.gpa_requirement is not None and profile.gpa is not None and profile.gpa < s.gpa_requirement:
                 continue
 
+            # Hard disqualification: Nationality does not match
+            if s.eligible_nationalities:
+                nats_lower = [n.lower().strip() for n in s.eligible_nationalities]
+                if not any(n in ("any", "all", "international", "global") for n in nats_lower):
+                    if profile.nationality:
+                        if profile.nationality.lower().strip() not in nats_lower:
+                            continue
+
             score = cls.calculate_score(profile, s)
             if score > 20.0:
                 results.append((s, score))
