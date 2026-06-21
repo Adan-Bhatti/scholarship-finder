@@ -5,12 +5,7 @@ from backend.core.config import settings
 from backend.models.profile import Profile
 from backend.models.scholarship import Scholarship
 
-# We only import anthropic if we need it to avoid hard crashes if the library isn't installed
-try:
-    from anthropic import Anthropic
-    import anthropic
-except ImportError:
-    Anthropic = None
+
 
 import httpx
 
