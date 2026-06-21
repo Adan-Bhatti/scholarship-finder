@@ -200,6 +200,9 @@ def _nationality_matches(profile_nationality: str, scholarship_nationalities: Li
       - Country form: 'Pakistan' matched against 'Pakistani'
       - Case-insensitive exact match
     """
+    if not scholarship_nationalities:
+        return True  # Empty list means no restrictions
+
     if not profile_nationality:
         return True  # No nationality set → don't disqualify
     pl = profile_nationality.lower().strip()
