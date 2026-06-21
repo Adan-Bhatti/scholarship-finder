@@ -33,7 +33,17 @@ def run_all_spiders():
     process.crawl('mastercard_foundation')
     process.crawl('aga_khan')
     process.crawl('kaust')
-    
+    # New international sources (batch 2)
+    process.crawl('mext')
+    process.crawl('kgsp')
+    process.crawl('turkiye_burslari')
+    process.crawl('csc_china')
+    process.crawl('eiffel')
+    process.crawl('swiss_govt')
+    process.crawl('world_bank')
+    process.crawl('isdb')
+    process.crawl('humboldt')
+
     process.start()
 
 def run_tier1_spiders():
