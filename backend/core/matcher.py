@@ -103,6 +103,19 @@ class ScholarshipMatcher:
                         if profile.nationality.lower().strip() not in nats_lower:
                             continue
 
+            # Hard disqualification: Destination / Eligible Countries do not match
+            if s.eligible_countries:
+                countries_lower = [c.lower().strip() for c in s.eligible_countries]
+                if not any(c in ("any", "all", "global", "worldwide", "international") for c in countries_lower):
+                    user_countries = []
+                    if profile.country_of_residence:
+                        user_countries.append(profile.country_of_residence.lower().strip())
+                    if profile.target_destinations:
+                        user_countries.extend([d.lower().strip() for d in profile.target_destinations if d])
+                    if user_countries:
+                        if not any(uc in countries_lower for uc in user_countries):
+                            continue
+
             score = cls.calculate_score(profile, s)
             if score > 20.0:
                 results.append((s, score))
