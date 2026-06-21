@@ -23,6 +23,7 @@ class Profile(Base):
     extracurriculars = Column(ARRAY(String))
     target_destinations = Column(ARRAY(String))
     graduation_year = Column(Integer)
+    max_sources = Column(Integer, default=5, server_default="5", nullable=False)
     
     updated_at = Column(DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow)
 
