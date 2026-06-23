@@ -59,10 +59,7 @@ export function Wizard() {
       }
     }
     if (currentStep === 3) {
-      if (!data.income_bracket) {
-        setError('Income bracket is required.');
-        return false;
-      }
+      // Income bracket is optional — no validation needed
     }
     return true;
   };
@@ -82,8 +79,9 @@ export function Wizard() {
     try {
       await createProfile(data as ProfileCreate);
       navigate('/dashboard');
-    } catch (err) {
-      alert('Failed to save profile');
+    } catch (err: any) {
+      const msg = err?.response?.data?.detail || 'Failed to save profile. Please try again.';
+      setError(msg);
     }
   };
 
