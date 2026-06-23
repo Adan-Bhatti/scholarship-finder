@@ -98,6 +98,13 @@ def get_matches(
 
     return [MatchResponse(scholarship=s, match_score=score) for s, score in paginated]
 
+@router.get("/{scholarship_id}", response_model=ScholarshipResponse)
+def get_scholarship(scholarship_id: uuid.UUID, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    scholarship = db.query(Scholarship).filter(Scholarship.id == scholarship_id).first()
+    if not scholarship:
+        raise HTTPException(status_code=404, detail="Scholarship not found")
+    return scholarship
+
 @router.post("/{scholarship_id}/save")
 def save_scholarship(scholarship_id: uuid.UUID, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     scholarship = db.query(Scholarship).filter(Scholarship.id == scholarship_id).first()

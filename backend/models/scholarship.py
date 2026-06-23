@@ -1,6 +1,6 @@
 import datetime
 import uuid
-from sqlalchemy import Column, String, Float, Boolean, DateTime, Text, Integer
+from sqlalchemy import Column, String, Float, Boolean, DateTime, Text, Integer, Index
 from sqlalchemy.dialects.postgresql import UUID, ARRAY
 from backend.database import Base
 
@@ -38,3 +38,9 @@ class Scholarship(Base):
     is_active = Column(Boolean, default=True)
     last_scraped_at = Column(DateTime)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
+
+    # Indexes for performance (especially on the deadline filter run on every request)
+    __table_args__ = (
+        Index('idx_scholarship_deadline_active', 'is_active', 'deadline'),
+        Index('idx_scholarship_created', 'created_at'),
+    )
