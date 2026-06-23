@@ -1,5 +1,6 @@
 import json
 import logging
+from functools import lru_cache
 from typing import Dict, Any
 from backend.core.config import settings
 from backend.models.profile import Profile
@@ -10,6 +11,9 @@ from backend.models.scholarship import Scholarship
 import httpx
 
 logger = logging.getLogger(__name__)
+
+# Simple in-memory cache: key = (scholarship_id, profile_gpa, profile_nationality, profile_degree)
+_AI_CACHE: Dict[tuple, Dict[str, Any]] = {}
 
 class AIService:
     def __init__(self):
@@ -76,7 +80,7 @@ class AIService:
             "Content-Type": "application/json"
         }
         payload = {
-            "model": "llama-3.1-8b-instant",
+            "model": "llama-3.3-70b-versatile",
             "messages": [
                 {"role": "system", "content": "You are a helpful API that returns strictly formatted JSON."},
                 {"role": "user", "content": prompt}
@@ -85,8 +89,14 @@ class AIService:
             "temperature": 0.2
         }
 
+        # Check cache first
+        cache_key = (str(scholarship.id), profile.gpa, profile.nationality, profile.degree_level)
+        if cache_key in _AI_CACHE:
+            logger.info(f"AI cache hit for scholarship {scholarship.id}")
+            return _AI_CACHE[cache_key]
+
         try:
-            response = httpx.post(url, json=payload, headers=headers, timeout=15.0)
+            response = httpx.post(url, json=payload, headers=headers, timeout=30.0)
             if response.status_code == 401:
                 logger.error("Groq API key is invalid or has been revoked. Please generate a new key at https://console.groq.com/")
                 return {
@@ -104,6 +114,8 @@ class AIService:
             
             result_text = response.json()["choices"][0]["message"]["content"]
             data = json.loads(result_text)
+            # Store in cache
+            _AI_CACHE[cache_key] = data
             return data
             
         except httpx.HTTPError as e:
