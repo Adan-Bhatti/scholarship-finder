@@ -5,6 +5,7 @@ export interface SearchParams {
   q?: string;
   degree?: string;
   country?: string;
+  field?: string;
   min_amount?: number;
   max_amount?: number;
   page?: number;

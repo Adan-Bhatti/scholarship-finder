@@ -22,6 +22,7 @@ def search_scholarships(
     q: Optional[str] = None,
     degree: Optional[str] = None,
     country: Optional[str] = None,
+    field: Optional[str] = None,
     min_amount: Optional[float] = None,
     max_amount: Optional[float] = None,
     page: int = 1,
@@ -43,9 +44,6 @@ def search_scholarships(
         )
         query = query.filter(search_filter)
         
-    # Note: SQLite in tests doesn't support array operators like any() easily
-    # We will do simple string matching for arrays since it's JSON encoded in SQLite
-    # but for postgres it's an ARRAY. We'll use cast to String for cross-compatibility in this simple search.
     from sqlalchemy import cast, String
     
     if degree:
@@ -53,6 +51,9 @@ def search_scholarships(
         
     if country:
         query = query.filter(cast(Scholarship.eligible_countries, String).ilike(f"%{country}%"))
+
+    if field:
+        query = query.filter(cast(Scholarship.fields_of_study, String).ilike(f"%{field}%"))
         
     if min_amount is not None:
         query = query.filter(Scholarship.amount_max >= min_amount)

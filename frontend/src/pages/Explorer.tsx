@@ -176,8 +176,8 @@ export function Explorer() {
                       <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Field of Study</label>
                       <select
                         className="w-full border border-gray-200 rounded-lg bg-slate-50 p-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
-                        value={(params as any).field || ''}
-                        onChange={(e) => handleFilterChange('q' as any, e.target.value || undefined)}
+                        value={params.field || ''}
+                        onChange={(e) => handleFilterChange('field', e.target.value || undefined)}
                       >
                         <option value="">Any Field</option>
                         {FIELDS_OF_STUDY.map(f => <option key={f} value={f}>{f}</option>)}
