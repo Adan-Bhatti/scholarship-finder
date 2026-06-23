@@ -33,7 +33,11 @@ export function DetailModal({ scholarship, onClose }: DetailModalProps) {
         const data = await getScholarshipExplanation(scholarship.id);
         setAiData(data);
       } catch (err: any) {
-        setError(err.message || 'Failed to generate AI explanation');
+        if (err.message === 'Network Error') {
+          setError('Could not connect to the server. Please check your connection or ensure the backend is running.');
+        } else {
+          setError(err?.response?.data?.detail || err.message || 'Failed to generate AI explanation');
+        }
       } finally {
         setLoading(false);
       }
