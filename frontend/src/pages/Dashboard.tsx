@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { Sidebar } from '../components/Dashboard/Sidebar';
 import { ScholarshipCard } from '../components/Dashboard/ScholarshipCard';
@@ -6,7 +7,7 @@ import { getMatches, getSavedScholarships } from '../api/scholarships';
 import { getDashboardStats, DashboardStats } from '../api/dashboard';
 import { MatchResult } from '../types';
 import { formatCurrency } from '../utils/currency';
-import { TargetIcon, BookmarkIcon, ClockIcon, BanknoteIcon } from 'lucide-react';
+import { TargetIcon, BookmarkIcon, ClockIcon, BanknoteIcon, AlertCircleIcon } from 'lucide-react';
 
 export function Dashboard() {
   const [matches, setMatches] = useState<MatchResult[]>([]);
@@ -105,8 +106,19 @@ export function Dashboard() {
             </div>
           ) : matches.length === 0 ? (
             <div className="text-center py-16 bg-white rounded-xl shadow-sm border border-gray-100">
-              <h3 className="text-xl font-medium text-gray-900 mb-2">No perfect matches yet</h3>
-              <p className="text-gray-500">We are constantly scraping new scholarships. Check back later!</p>
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-50 rounded-full mb-4">
+                <AlertCircleIcon className="text-blue-500" size={32} />
+              </div>
+              <h3 className="text-xl font-medium text-gray-900 mb-2">No matches yet</h3>
+              <p className="text-gray-500 mb-6 max-w-md mx-auto">
+                Make sure your profile is complete with your nationality, degree level, and target destinations to get personalized scholarship matches.
+              </p>
+              <Link 
+                to="/profile"
+                className="inline-block px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Complete Your Profile →
+              </Link>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
