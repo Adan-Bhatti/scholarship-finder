@@ -98,6 +98,11 @@ def get_matches(
 
     return [MatchResponse(scholarship=s, match_score=score) for s, score in paginated]
 
+@router.get("/saved", response_model=List[SavedScholarshipResponse])
+def get_saved_scholarships(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    saved = db.query(SavedScholarship).filter(SavedScholarship.user_id == current_user.id).all()
+    return saved
+
 @router.get("/{scholarship_id}", response_model=ScholarshipResponse)
 def get_scholarship(scholarship_id: uuid.UUID, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     scholarship = db.query(Scholarship).filter(Scholarship.id == scholarship_id).first()
@@ -142,10 +147,6 @@ def unsave_scholarship(scholarship_id: uuid.UUID, current_user: User = Depends(g
     db.commit()
     return {"message": "Scholarship unsaved successfully"}
 
-@router.get("/saved", response_model=List[SavedScholarshipResponse])
-def get_saved_scholarships(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    saved = db.query(SavedScholarship).filter(SavedScholarship.user_id == current_user.id).all()
-    return saved
 
 @router.patch("/{scholarship_id}/saved")
 def update_saved_scholarship(scholarship_id: uuid.UUID, update_data: SavedScholarshipUpdate, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
