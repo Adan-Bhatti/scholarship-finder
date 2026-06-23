@@ -155,17 +155,17 @@ export function ProfileView() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">GPA</label>
-                  <input type="number" step="0.01" name="gpa" value={profile.gpa || ''} onChange={handleChange} className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="4.0" />
+                  <input type="number" step="0.01" min="0" max="4" name="gpa" value={profile.gpa || ''} onChange={handleChange} onWheel={(e) => e.currentTarget.blur()} className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g. 3.8" />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Graduation Year</label>
-                  <input type="number" name="graduation_year" value={profile.graduation_year || ''} onChange={handleChange} className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="2025" />
+                  <input type="number" min="1900" max="2100" name="graduation_year" value={profile.graduation_year || ''} onChange={handleChange} onWheel={(e) => e.currentTarget.blur()} className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="2025" />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Max Sources to Match</label>
-                  <input type="number" name="max_sources" min="1" max="50" value={profile.max_sources !== undefined ? profile.max_sources : 5} onChange={handleChange} className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="5" />
+                  <input type="number" name="max_sources" min="1" max="50" value={profile.max_sources !== undefined ? profile.max_sources : 5} onChange={handleChange} onWheel={(e) => e.currentTarget.blur()} className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="5" />
                 </div>
 
                 <div>

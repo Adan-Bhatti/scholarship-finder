@@ -118,6 +118,7 @@ export function Explorer() {
                       className="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-slate-50 p-2.5 text-sm"
                       value={params.min_amount || ''}
                       onChange={(e) => handleFilterChange('min_amount', e.target.value ? Number(e.target.value) : undefined)}
+                      onWheel={(e) => e.currentTarget.blur()}
                     />
                   </div>
                 </div>

@@ -42,10 +42,13 @@ export function StepAcademic({ data, updateData }: StepAcademicProps) {
         <input 
           type="number" 
           step="0.01"
+          min="0"
+          max="4"
           placeholder="e.g. 3.8"
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border"
           value={data.gpa || ''}
           onChange={(e) => updateData({ gpa: parseFloat(e.target.value) || null })}
+          onWheel={(e) => e.currentTarget.blur()}
         />
       </div>
 
@@ -53,10 +56,13 @@ export function StepAcademic({ data, updateData }: StepAcademicProps) {
         <label className="block text-sm font-medium text-gray-700">Graduation Year</label>
         <input 
           type="number" 
+          min="1900"
+          max="2100"
           placeholder="e.g. 2026"
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border"
           value={data.graduation_year || ''}
           onChange={(e) => updateData({ graduation_year: parseInt(e.target.value) || null })}
+          onWheel={(e) => e.currentTarget.blur()}
         />
       </div>
 
@@ -70,6 +76,7 @@ export function StepAcademic({ data, updateData }: StepAcademicProps) {
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border"
           value={data.max_sources !== undefined ? data.max_sources : 5}
           onChange={(e) => updateData({ max_sources: parseInt(e.target.value) || 0 })}
+          onWheel={(e) => e.currentTarget.blur()}
         />
       </div>
     </div>
