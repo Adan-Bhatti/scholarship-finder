@@ -1,5 +1,6 @@
 import uuid
 from typing import List
+from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
@@ -28,7 +29,11 @@ def search_scholarships(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    query = db.query(Scholarship).filter(Scholarship.is_active == True)
+    now = datetime.utcnow()
+    query = db.query(Scholarship).filter(
+        Scholarship.is_active == True,
+        (Scholarship.deadline == None) | (Scholarship.deadline > now)
+    )
     
     if q:
         search_filter = or_(
@@ -79,7 +84,11 @@ def get_matches(
     if not profile:
         raise HTTPException(status_code=400, detail="Profile not created yet. Please complete onboarding.")
 
-    all_scholarships = db.query(Scholarship).filter(Scholarship.is_active == True).all()
+    now = datetime.utcnow()
+    all_scholarships = db.query(Scholarship).filter(
+        Scholarship.is_active == True,
+        (Scholarship.deadline == None) | (Scholarship.deadline > now)
+    ).all()
     matches = ScholarshipMatcher.match_all(profile, all_scholarships)
 
     # Paginate results
