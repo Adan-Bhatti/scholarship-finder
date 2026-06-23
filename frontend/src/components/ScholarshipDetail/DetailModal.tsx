@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { XIcon, SparklesIcon, CheckCircleIcon, ExternalLinkIcon } from 'lucide-react';
 import type { Scholarship } from '../../types';
 import { getScholarshipExplanation } from '../../api/ai';
@@ -16,6 +16,16 @@ export function DetailModal({ scholarship, onClose }: DetailModalProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Close modal on Escape key
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (e.key === 'Escape') onClose();
+  }, [onClose]);
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [handleKeyDown]);
+
   useEffect(() => {
     const fetchExplanation = async () => {
       try {
@@ -31,12 +41,25 @@ export function DetailModal({ scholarship, onClose }: DetailModalProps) {
     fetchExplanation();
   }, [scholarship.id]);
 
+  const formatAmount = () => {
+    if (!scholarship.amount_max && !scholarship.amount_min) return 'Fully Funded / Varies';
+    const currency = scholarship.currency || 'USD';
+    if (scholarship.amount_min && scholarship.amount_max && scholarship.amount_min !== scholarship.amount_max) {
+      return `${formatCurrency(scholarship.amount_min, currency)} – ${formatCurrency(scholarship.amount_max, currency)}`;
+    }
+    return formatCurrency(scholarship.amount_max || scholarship.amount_min, currency);
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm"
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+    >
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto relative">
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
+          aria-label="Close modal"
+          className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors z-10"
         >
           <XIcon size={24} />
         </button>
@@ -54,11 +77,14 @@ export function DetailModal({ scholarship, onClose }: DetailModalProps) {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
             <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
               <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">Amount</p>
-              <p className="font-bold text-gray-900">{formatCurrency(scholarship.amount_max, scholarship.currency)}</p>
+              <p className="font-bold text-gray-900 text-sm">{formatAmount()}</p>
+              {scholarship.currency && scholarship.currency !== 'USD' && (
+                <p className="text-xs text-gray-400 mt-1">{scholarship.currency} currency</p>
+              )}
             </div>
             <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
               <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">Deadline</p>
-              <p className="font-bold text-gray-900">{formatDate(scholarship.deadline)}</p>
+              <p className="font-bold text-gray-900 text-sm">{formatDate(scholarship.deadline)}</p>
             </div>
             <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
               <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">Min GPA</p>
@@ -66,7 +92,7 @@ export function DetailModal({ scholarship, onClose }: DetailModalProps) {
             </div>
             <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
               <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">Renewable</p>
-              <p className="font-bold text-gray-900">{scholarship.renewable ? 'Yes' : 'No'}</p>
+              <p className="font-bold text-gray-900">{scholarship.renewable ? 'Yes ✓' : 'No'}</p>
             </div>
           </div>
 
