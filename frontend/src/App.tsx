@@ -8,8 +8,8 @@ import { Explorer } from './pages/Explorer';
 import { Saved } from './pages/Saved';
 import { ProfileView } from './pages/ProfileView';
 import { NotFound } from './pages/NotFound';
-import { ResetPasswordPage } from './pages/ResetPasswordPage';
 import { PublicProfile } from './pages/PublicProfile';
+import { AdminDashboard } from './pages/AdminDashboard';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { ChatWidget } from './components/ChatWidget';
 
@@ -76,6 +76,14 @@ function App() {
           element={
             <ProtectedRoute>
               <ProfileView />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <AdminDashboard />
             </ProtectedRoute>
           }
         />

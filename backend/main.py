@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
-from backend.routers import auth, profile, scholarships, health, ai, dashboard
+from backend.routers import auth, profile, scholarships, health, ai, dashboard, scraper
 from backend.core.exceptions import BaseAPIException
 import logging
 from slowapi import _rate_limit_exceeded_handler
@@ -71,3 +71,4 @@ app.include_router(profile.router)
 app.include_router(scholarships.router)
 app.include_router(ai.router)
 app.include_router(dashboard.router)
+app.include_router(scraper.router)

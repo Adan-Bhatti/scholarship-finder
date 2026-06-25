@@ -1,5 +1,5 @@
 import React from 'react';
-import { HomeIcon, BookmarkIcon, UserIcon, LogOutIcon, SearchIcon, MoonIcon, SunIcon } from 'lucide-react';
+import { HomeIcon, BookmarkIcon, UserIcon, LogOutIcon, SearchIcon, MoonIcon, SunIcon, ShieldIcon } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useStore } from '../../store/useStore';
 import { motion } from 'framer-motion';
@@ -45,6 +45,7 @@ export function Sidebar() {
         <NavItem to="/explore" icon={<SearchIcon size={20} />} label="Explore" />
         <NavItem to="/saved" icon={<BookmarkIcon size={20} />} label="Saved" />
         <NavItem to="/profile" icon={<UserIcon size={20} />} label="Profile" />
+        <NavItem to="/admin" icon={<ShieldIcon size={20} />} label="Admin" />
       </nav>
 
       <div className="p-4 border-t border-slate-800 space-y-2">
