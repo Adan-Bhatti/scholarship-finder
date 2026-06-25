@@ -11,6 +11,7 @@ import { NotFound } from './pages/NotFound';
 import { ResetPasswordPage } from './pages/ResetPasswordPage';
 import { PublicProfile } from './pages/PublicProfile';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import { ChatWidget } from './components/ChatWidget';
 
 function App() {
   return (
@@ -82,6 +83,7 @@ function App() {
         {/* 404 catch-all */}
         <Route path="*" element={<NotFound />} />
       </Routes>
+      <ChatWidget />
     </Router>
   );
 }

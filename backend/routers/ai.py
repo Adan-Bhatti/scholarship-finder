@@ -39,3 +39,44 @@ def explain_match(
         explanation=result.get("explanation", "No explanation provided."),
         checklist=result.get("checklist", [])
     )
+
+class ChatRequest(BaseModel):
+    query: str
+
+class ChatResponse(BaseModel):
+    answer: str
+
+@router.post("/chat", response_model=ChatResponse)
+@limiter.limit("10/minute")
+def chat_with_ai(
+    request: Request,
+    body: ChatRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    profile = db.query(Profile).filter(Profile.user_id == current_user.id).first()
+    if not profile:
+        raise HTTPException(status_code=400, detail="Profile not found. Please complete onboarding.")
+        
+    from sqlalchemy import func, or_
+    # Simple search to get context
+    q = body.query
+    ts_vector = func.to_tsvector('english', Scholarship.title + ' ' + func.coalesce(Scholarship.description, ''))
+    ts_query = func.plainto_tsquery('english', q)
+    
+    scholarships = db.query(Scholarship).filter(
+        Scholarship.is_active == True,
+        or_(
+            ts_vector.op('@@')(ts_query),
+            Scholarship.title.ilike(f"%{q}%")
+        )
+    ).limit(5).all()
+
+    if not scholarships:
+        # If no direct matches, just get some top ones based on profile degree
+        scholarships = db.query(Scholarship).filter(
+            Scholarship.is_active == True
+        ).limit(3).all()
+
+    answer = ai_service.chat(body.query, profile, scholarships)
+    return ChatResponse(answer=answer)

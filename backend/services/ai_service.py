@@ -128,4 +128,59 @@ class AIService:
             logger.error(f"Unexpected AI error: {str(e)}")
             return {"explanation": "An unexpected error occurred during AI analysis.", "checklist": []}
 
+    def chat(self, query: str, profile: Profile, scholarships: list[Scholarship]) -> str:
+        """
+        RAG Chatbot logic: Given a user's query, profile, and top N matched scholarships,
+        generates an answer.
+        """
+        if not self.api_key:
+            return "AI Chat is currently disabled. Please configure your GROQ_API_KEY."
+
+        context = ""
+        for idx, s in enumerate(scholarships, 1):
+            context += f"\n[{idx}] {s.title} by {s.provider} (Amount: {s.currency} {s.amount_max or 'N/A'})\n"
+            context += f"Description: {s.description}\n"
+
+        prompt = f"""
+        You are ScholarshipAI, a helpful and encouraging scholarship advisor assistant.
+        
+        User's Profile:
+        {self._format_profile(profile)}
+        
+        Available Scholarships Context:
+        {context}
+
+        User's Question:
+        {query}
+
+        Provide a concise, helpful answer to the user's question. Refer to the scholarships in the context if relevant.
+        """
+
+        url = "https://api.groq.com/openai/v1/chat/completions"
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "model": "llama-3.3-70b-versatile",
+            "messages": [
+                {"role": "system", "content": "You are a helpful scholarship advisor assistant."},
+                {"role": "user", "content": prompt}
+            ],
+            "temperature": 0.5
+        }
+
+        try:
+            response = httpx.post(url, json=payload, headers=headers, timeout=30.0)
+            if response.status_code == 401:
+                return "The Groq API key is invalid or revoked. Please update the API key."
+            if response.status_code != 200:
+                return "I'm sorry, I couldn't process your request right now."
+            
+            return response.json()["choices"][0]["message"]["content"]
+            
+        except Exception as e:
+            logger.error(f"Chat error: {str(e)}")
+            return "An unexpected error occurred."
+
 ai_service = AIService()
