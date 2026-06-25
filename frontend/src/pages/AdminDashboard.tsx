@@ -56,6 +56,25 @@ export function AdminDashboard() {
               </div>
             </div>
           </div>
+
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 mt-6">
+            <h3 className="text-xl font-bold text-gray-900 mb-4">Email Notifications</h3>
+            <p className="text-sm text-gray-500 mb-6">Manually trigger the deadline reminder job. This job normally runs daily at 8:00 AM via Celery beat.</p>
+            
+            <button
+                onClick={async () => {
+                  try {
+                    await apiClient.post('/scraper/reminders');
+                    toast.success('Reminders job started in background.');
+                  } catch (err: any) {
+                    toast.error('Failed to trigger reminders.');
+                  }
+                }}
+                className="flex items-center bg-indigo-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-indigo-700 transition-colors"
+              >
+                Trigger Deadline Reminders
+            </button>
+          </div>
         </div>
       </main>
     </div>

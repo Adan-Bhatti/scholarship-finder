@@ -22,3 +22,10 @@ def trigger_scraper(background_tasks: BackgroundTasks, current_user: User = Depe
     # In a real app, verify if current_user is admin
     background_tasks.add_task(run_scraper_background)
     return {"message": "Scraper started in the background."}
+
+from backend.tasks.email_tasks import send_deadline_reminders
+
+@router.post("/reminders")
+def trigger_reminders(background_tasks: BackgroundTasks, current_user: User = Depends(get_current_user)):
+    background_tasks.add_task(send_deadline_reminders)
+    return {"message": "Deadline reminders triggered in the background."}
