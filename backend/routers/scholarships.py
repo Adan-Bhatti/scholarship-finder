@@ -36,13 +36,12 @@ def search_scholarships(
         (Scholarship.deadline == None) | (Scholarship.deadline > now)
     )
     
+    from sqlalchemy import func
     if q:
-        search_filter = or_(
-            Scholarship.title.ilike(f"%{q}%"),
-            Scholarship.provider.ilike(f"%{q}%"),
-            Scholarship.description.ilike(f"%{q}%")
-        )
-        query = query.filter(search_filter)
+        # Full-Text Search Optimization
+        ts_vector = func.to_tsvector('english', Scholarship.title + ' ' + func.coalesce(Scholarship.description, ''))
+        ts_query = func.plainto_tsquery('english', q)
+        query = query.filter(ts_vector.op('@@')(ts_query))
         
     from sqlalchemy import cast, String
     
