@@ -8,6 +8,7 @@ import { Explorer } from './pages/Explorer';
 import { Saved } from './pages/Saved';
 import { ProfileView } from './pages/ProfileView';
 import { NotFound } from './pages/NotFound';
+import { ResetPasswordPage } from './pages/ResetPasswordPage';
 import { ProtectedRoute } from './components/ProtectedRoute';
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
       <Routes>
         {/* Public routes */}
         <Route path="/" element={<AuthPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
 
         {/* Protected routes */}
         <Route

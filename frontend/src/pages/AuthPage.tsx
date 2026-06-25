@@ -4,7 +4,7 @@ import { apiClient } from '../api/client';
 import toast from 'react-hot-toast';
 
 export function AuthPage() {
-  const [mode, setMode] = useState<'login' | 'register'>('login');
+  const [mode, setMode] = useState<'login' | 'register' | 'forgot_password'>('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -18,6 +18,10 @@ export function AuthPage() {
       if (mode === 'register') {
         await apiClient.post('/auth/register', { email, password });
         toast.success('Account created! Please log in.');
+        setMode('login');
+      } else if (mode === 'forgot_password') {
+        const { data } = await apiClient.post('/auth/request-reset', { email });
+        toast.success(data.message || 'If that email exists, a reset link was sent.');
         setMode('login');
       } else {
         const params = new URLSearchParams();
@@ -33,7 +37,6 @@ export function AuthPage() {
           localStorage.setItem('refresh_token', data.refresh_token);
         }
 
-        // Check if profile exists — redirect accordingly
         try {
           await apiClient.get('/profile');
           navigate('/dashboard');
@@ -52,7 +55,6 @@ export function AuthPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-900 flex items-center justify-center px-4">
       <div className="w-full max-w-md">
-        {/* Logo */}
         <div className="text-center mb-10">
           <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">
             ScholarshipAI
@@ -60,9 +62,7 @@ export function AuthPage() {
           <p className="text-slate-400 mt-2 text-sm">AI-powered scholarship matching</p>
         </div>
 
-        {/* Card */}
         <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-8 shadow-2xl">
-          {/* Tabs */}
           <div className="flex rounded-lg bg-white/10 p-1 mb-8">
             <button
               onClick={() => setMode('login')}
@@ -96,18 +96,44 @@ export function AuthPage() {
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">Password</label>
-              <input
-                type="password"
-                id="auth-password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-              />
-            </div>
+            {mode !== 'forgot_password' && (
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2">Password</label>
+                <input
+                  type="password"
+                  id="auth-password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                />
+              </div>
+            )}
+
+            {mode === 'login' && (
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => setMode('forgot_password')}
+                  className="text-sm text-blue-400 hover:text-blue-300"
+                >
+                  Forgot password?
+                </button>
+              </div>
+            )}
+
+            {mode === 'forgot_password' && (
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => setMode('login')}
+                  className="text-sm text-blue-400 hover:text-blue-300"
+                >
+                  Back to login
+                </button>
+              </div>
+            )}
 
             <button
               type="submit"
@@ -121,10 +147,14 @@ export function AuthPage() {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                   </svg>
-                  {mode === 'login' ? 'Signing in...' : 'Creating account...'}
+                  Processing...
                 </span>
+              ) : mode === 'login' ? (
+                'Sign In'
+              ) : mode === 'register' ? (
+                'Create Account'
               ) : (
-                mode === 'login' ? 'Sign In' : 'Create Account'
+                'Send Reset Link'
               )}
             </button>
           </form>

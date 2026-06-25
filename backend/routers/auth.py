@@ -6,8 +6,8 @@ from jose import jwt, JWTError
 
 from backend.database import get_db
 from backend.models.user import User
-from backend.schemas.user import UserCreate, UserResponse, Token, TokenData, RefreshTokenRequest
-from backend.core.security import get_password_hash, verify_password, create_access_token, create_refresh_token, SECRET_KEY, ALGORITHM
+from backend.schemas.user import UserCreate, UserResponse, Token, TokenData, RefreshTokenRequest, PasswordResetRequest, PasswordResetConfirm
+from backend.core.security import get_password_hash, verify_password, create_access_token, create_refresh_token, create_reset_token, SECRET_KEY, ALGORITHM
 from backend.core.limiter import limiter
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -93,3 +93,33 @@ def refresh_token_route(request: Request, body: RefreshTokenRequest, db: Session
 @router.get("/me", response_model=UserResponse)
 def read_users_me(current_user: User = Depends(get_current_user)):
     return current_user
+
+@router.post("/request-reset")
+@limiter.limit("3/minute")
+def request_password_reset(request: Request, body: PasswordResetRequest, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.email == body.email).first()
+    if user:
+        reset_token = create_reset_token(email=user.email)
+        # In a real app, send email here. Mocking for now:
+        print(f"--- MOCK EMAIL --- \nTo: {user.email}\nSubject: Password Reset\nLink: http://localhost:5173/reset-password?token={reset_token}\n------------------")
+    return {"message": "If that email exists in our system, we have sent a reset link."}
+
+@router.post("/confirm-reset")
+@limiter.limit("3/minute")
+def confirm_password_reset(request: Request, body: PasswordResetConfirm, db: Session = Depends(get_db)):
+    try:
+        payload = jwt.decode(body.token, SECRET_KEY, algorithms=[ALGORITHM])
+        email: str = payload.get("sub")
+        token_type: str = payload.get("type")
+        if email is None or token_type != "reset":
+            raise HTTPException(status_code=400, detail="Invalid token")
+    except JWTError:
+        raise HTTPException(status_code=400, detail="Invalid or expired token")
+        
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        raise HTTPException(status_code=400, detail="Invalid token")
+        
+    user.password_hash = get_password_hash(body.new_password)
+    db.commit()
+    return {"message": "Password successfully reset."}
