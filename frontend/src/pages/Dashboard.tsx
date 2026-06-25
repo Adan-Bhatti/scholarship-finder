@@ -17,6 +17,17 @@ export function Dashboard() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // Handle OAuth redirect tokens
+    const searchParams = new URLSearchParams(window.location.search);
+    const token = searchParams.get('token');
+    const refresh = searchParams.get('refresh');
+    if (token) {
+      localStorage.setItem('token', token);
+      if (refresh) localStorage.setItem('refresh_token', refresh);
+      // Clean URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+
     async function fetchData() {
       try {
         setLoading(true);

@@ -123,3 +123,36 @@ def confirm_password_reset(request: Request, body: PasswordResetConfirm, db: Ses
     user.password_hash = get_password_hash(body.new_password)
     db.commit()
     return {"message": "Password successfully reset."}
+
+@router.get("/google")
+def google_auth_mock(db: Session = Depends(get_db)):
+    # Mock OAuth flow
+    email = "google-user@mock.com"
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        user = User(email=email, password_hash=get_password_hash("MockOauth123!"))
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+    
+    access_token = create_access_token(subject=user.id)
+    refresh_token = create_refresh_token(subject=user.id)
+    # Typically this would redirect to the frontend with the token
+    from fastapi.responses import RedirectResponse
+    return RedirectResponse(url=f"http://localhost:5173/dashboard?token={access_token}&refresh={refresh_token}")
+
+@router.get("/github")
+def github_auth_mock(db: Session = Depends(get_db)):
+    # Mock OAuth flow
+    email = "github-user@mock.com"
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        user = User(email=email, password_hash=get_password_hash("MockOauth123!"))
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+    
+    access_token = create_access_token(subject=user.id)
+    refresh_token = create_refresh_token(subject=user.id)
+    from fastapi.responses import RedirectResponse
+    return RedirectResponse(url=f"http://localhost:5173/dashboard?token={access_token}&refresh={refresh_token}")
