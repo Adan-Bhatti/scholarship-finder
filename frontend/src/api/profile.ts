@@ -20,5 +20,16 @@ export const profileApi = {
   getPublicProfile: async (id: string): Promise<Profile> => {
     const response = await apiClient.get(`/profile/public/${id}`);
     return response.data;
+  },
+
+  uploadResume: async (file: File): Promise<Profile> => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const response = await apiClient.post('/profile/upload-resume', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
   }
 };

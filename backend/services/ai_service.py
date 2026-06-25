@@ -183,4 +183,51 @@ class AIService:
             logger.error(f"Chat error: {str(e)}")
             return "An unexpected error occurred."
 
+    def parse_resume(self, resume_text: str) -> Dict[str, Any]:
+        """
+        Parses raw resume text and extracts profile-relevant fields like degree_level, 
+        field_of_study, gpa, and extracurriculars.
+        """
+        if not self.api_key:
+            return {}
+
+        prompt = f"""
+        You are an expert resume parser. Extract the following information from the resume text provided below.
+        Return ONLY a JSON object with these keys (use null or empty array if not found):
+        - degree_level (string: "High School", "Bachelors", "Masters", "PhD", or null)
+        - field_of_study (string, e.g., "Computer Science", or null)
+        - gpa (float, e.g. 3.8, or null)
+        - extracurriculars (array of strings, e.g. ["Debate Club", "Varsity Soccer"], or [])
+        - graduation_year (integer, e.g. 2024, or null)
+        - target_destinations (array of strings, typically inferred from languages/certifications or just [])
+        
+        Resume Text:
+        {resume_text}
+        """
+
+        url = "https://api.groq.com/openai/v1/chat/completions"
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "model": "llama-3.3-70b-versatile",
+            "messages": [
+                {"role": "system", "content": "You are a helpful API that returns strictly formatted JSON."},
+                {"role": "user", "content": prompt}
+            ],
+            "response_format": {"type": "json_object"},
+            "temperature": 0.1
+        }
+
+        try:
+            response = httpx.post(url, json=payload, headers=headers, timeout=30.0)
+            if response.status_code == 200:
+                result_text = response.json()["choices"][0]["message"]["content"]
+                return json.loads(result_text)
+            return {}
+        except Exception as e:
+            logger.error(f"Resume parsing error: {str(e)}")
+            return {}
+
 ai_service = AIService()

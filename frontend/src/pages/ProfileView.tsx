@@ -8,6 +8,7 @@ export function ProfileView() {
   const [profile, setProfile] = useState<Partial<Profile>>({});
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [isNewProfile, setIsNewProfile] = useState(false);
   const [message, setMessage] = useState<{type: 'success' | 'error', text: string} | null>(null);
 
@@ -107,6 +108,30 @@ export function ProfileView() {
     }
   };
 
+  const handleResumeUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    if (file.type !== 'application/pdf') {
+      setMessage({ type: 'error', text: 'Only PDF resumes are supported.' });
+      return;
+    }
+
+    setIsUploading(true);
+    setMessage(null);
+    try {
+      const updatedProfile = await profileApi.uploadResume(file);
+      setProfile(updatedProfile);
+      setMessage({ type: 'success', text: 'Resume parsed and profile updated successfully!' });
+    } catch (err: any) {
+      const errMsg = err.response?.data?.detail || 'Failed to upload and parse resume.';
+      setMessage({ type: 'error', text: errMsg });
+    } finally {
+      setIsUploading(false);
+      if (e.target) e.target.value = ''; // Reset file input
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-slate-50 flex">
@@ -143,6 +168,20 @@ export function ProfileView() {
                 Share Profile
               </button>
             )}
+          </div>
+          
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 mb-8">
+            <h3 className="text-xl font-bold text-gray-900 mb-4">Upload Resume</h3>
+            <p className="text-sm text-gray-500 mb-4">Upload your PDF resume to automatically fill out your profile details using our AI parser.</p>
+            <div className="flex items-center">
+              <label className="relative cursor-pointer bg-blue-50 text-blue-600 font-medium py-2 px-4 rounded-lg hover:bg-blue-100 transition-colors">
+                <span>{isUploading ? 'Parsing Resume...' : 'Select PDF Resume'}</span>
+                <input type="file" className="hidden" accept="application/pdf" onChange={handleResumeUpload} disabled={isUploading || isNewProfile} />
+              </label>
+              {isNewProfile && (
+                <span className="ml-4 text-sm text-amber-600">Please fill out basic details and click Save before uploading a resume.</span>
+              )}
+            </div>
           </div>
           
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
