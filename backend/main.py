@@ -4,6 +4,9 @@ from fastapi.exceptions import RequestValidationError
 from backend.routers import auth, profile, scholarships, health, ai, dashboard
 from backend.core.exceptions import BaseAPIException
 import logging
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from backend.core.limiter import limiter
 
 logger = logging.getLogger(__name__)
 
@@ -14,6 +17,9 @@ app = FastAPI(
     description="Backend API for the AI-powered Scholarship Finder",
     version="1.0.0",
 )
+
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 app.add_middleware(
     CORSMiddleware,

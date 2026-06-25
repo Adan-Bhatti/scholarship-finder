@@ -1,5 +1,5 @@
 import uuid
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from backend.database import get_db
 from backend.routers.auth import get_current_user
@@ -7,6 +7,7 @@ from backend.models.user import User
 from backend.models.profile import Profile
 from backend.models.scholarship import Scholarship
 from backend.services.ai_service import ai_service
+from backend.core.limiter import limiter
 from pydantic import BaseModel
 from typing import List
 
@@ -17,7 +18,9 @@ class ExplanationResponse(BaseModel):
     checklist: List[str]
 
 @router.get("/explain/{scholarship_id}", response_model=ExplanationResponse)
+@limiter.limit("5/minute")
 def explain_match(
+    request: Request,
     scholarship_id: uuid.UUID, 
     current_user: User = Depends(get_current_user), 
     db: Session = Depends(get_db)
