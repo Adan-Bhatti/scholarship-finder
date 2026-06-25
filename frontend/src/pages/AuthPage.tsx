@@ -29,6 +29,9 @@ export function AuthPage() {
         });
 
         localStorage.setItem('token', data.access_token);
+        if (data.refresh_token) {
+          localStorage.setItem('refresh_token', data.refresh_token);
+        }
 
         // Check if profile exists — redirect accordingly
         try {
