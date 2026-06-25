@@ -15,5 +15,10 @@ export const profileApi = {
   updateProfile: async (data: Partial<Profile>): Promise<Profile> => {
     const response = await apiClient.patch('/profile', data);
     return response.data;
+  },
+
+  getPublicProfile: async (id: string): Promise<Profile> => {
+    const response = await apiClient.get(`/profile/public/${id}`);
+    return response.data;
   }
 };

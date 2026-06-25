@@ -45,3 +45,10 @@ def update_profile(profile_in: ProfileUpdate, current_user: User = Depends(get_c
     db.commit()
     db.refresh(profile)
     return profile
+
+@router.get("/public/{profile_id}", response_model=ProfileResponse)
+def get_public_profile(profile_id: uuid.UUID, db: Session = Depends(get_db)):
+    profile = db.query(Profile).filter(Profile.id == profile_id).first()
+    if not profile:
+        raise HTTPException(status_code=404, detail="Profile not found or is private")
+    return profile

@@ -9,6 +9,7 @@ import { Saved } from './pages/Saved';
 import { ProfileView } from './pages/ProfileView';
 import { NotFound } from './pages/NotFound';
 import { ResetPasswordPage } from './pages/ResetPasswordPage';
+import { PublicProfile } from './pages/PublicProfile';
 import { ProtectedRoute } from './components/ProtectedRoute';
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
         {/* Public routes */}
         <Route path="/" element={<AuthPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
+        <Route path="/p/:id" element={<PublicProfile />} />
 
         {/* Protected routes */}
         <Route
