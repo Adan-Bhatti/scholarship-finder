@@ -1,6 +1,8 @@
 import React from 'react';
-import { HomeIcon, BookmarkIcon, UserIcon, LogOutIcon, SearchIcon } from 'lucide-react';
+import { HomeIcon, BookmarkIcon, UserIcon, LogOutIcon, SearchIcon, MoonIcon, SunIcon } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
+import { useStore } from '../../store/useStore';
+import { motion } from 'framer-motion';
 
 function NavItem({ to, icon, label }: { to: string; icon: React.ReactNode; label: string }) {
   const location = useLocation();
@@ -19,13 +21,19 @@ function NavItem({ to, icon, label }: { to: string; icon: React.ReactNode; label
 }
 
 export function Sidebar() {
+  const { theme, toggleTheme } = useStore();
+
   const handleLogout = () => {
     localStorage.removeItem('token');
     window.location.href = '/';
   };
 
   return (
-    <div className="w-64 h-screen bg-slate-900 text-white flex flex-col fixed left-0 top-0">
+    <motion.div 
+      initial={{ x: -100, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      className="w-64 h-screen bg-slate-900 text-white flex flex-col fixed left-0 top-0 z-50"
+    >
       <div className="p-6">
         <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-emerald-400">
           ScholarshipAI
@@ -39,7 +47,14 @@ export function Sidebar() {
         <NavItem to="/profile" icon={<UserIcon size={20} />} label="Profile" />
       </nav>
 
-      <div className="p-4 border-t border-slate-800">
+      <div className="p-4 border-t border-slate-800 space-y-2">
+        <button 
+          onClick={toggleTheme}
+          className="flex items-center w-full px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
+        >
+          {theme === 'dark' ? <SunIcon size={20} className="mr-3" /> : <MoonIcon size={20} className="mr-3" />}
+          <span className="font-medium">Toggle Theme</span>
+        </button>
         <button 
           onClick={handleLogout}
           className="flex items-center w-full px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
@@ -48,6 +63,6 @@ export function Sidebar() {
           <span className="font-medium">Sign Out</span>
         </button>
       </div>
-    </div>
+    </motion.div>
   );
 }
