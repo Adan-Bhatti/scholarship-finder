@@ -8,11 +8,11 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Playwright dependencies
-RUN npx -y playwright install --with-deps
-
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
+
+# Install Playwright dependencies using Python CLI
+RUN playwright install --with-deps chromium
 
 # Copy the rest of the application
 COPY . /app/backend/
