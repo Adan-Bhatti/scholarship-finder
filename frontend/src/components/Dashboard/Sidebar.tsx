@@ -44,7 +44,7 @@ export function Sidebar() {
       <nav className="flex-1 px-4 space-y-2 mt-8">
         <NavItem to="/dashboard" icon={<HomeIcon size={20} />} label="Dashboard" />
         <NavItem to="/explore" icon={<SearchIcon size={20} />} label="Explore" />
-        <NavItem to="/saved" icon={<BookmarkIcon size={20} />} label="Saved" />
+        <NavItem to="/saved" icon={<BookmarkIcon size={20} />} label="Tracker" />
         <NavItem to="/profile" icon={<UserIcon size={20} />} label="Profile" />
         <NavItem to="/admin" icon={<ShieldIcon size={20} />} label="Admin" />
       </nav>
