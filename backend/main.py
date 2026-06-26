@@ -7,6 +7,10 @@ import logging
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from backend.core.limiter import limiter
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.interval import IntervalTrigger
+from backend.routers.scraper import run_scraper_background
+from backend.tasks.email_tasks import send_deadline_reminders
 
 logger = logging.getLogger(__name__)
 
@@ -28,6 +32,32 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+scheduler = BackgroundScheduler()
+
+@app.on_event("startup")
+def start_scheduler():
+    scheduler.add_job(
+        run_scraper_background,
+        trigger=IntervalTrigger(hours=24),
+        id="run_scraper_daily",
+        name="Scrape Scholarships Every 24h",
+        replace_existing=True
+    )
+    scheduler.add_job(
+        send_deadline_reminders,
+        trigger=IntervalTrigger(hours=24),
+        id="send_email_reminders_daily",
+        name="Send Deadline Reminders Every 24h",
+        replace_existing=True
+    )
+    scheduler.start()
+    logger.info("APScheduler started successfully.")
+
+@app.on_event("shutdown")
+def stop_scheduler():
+    scheduler.shutdown()
+    logger.info("APScheduler shutdown.")
 
 @app.exception_handler(BaseAPIException)
 async def custom_api_exception_handler(request: Request, exc: BaseAPIException):
