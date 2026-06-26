@@ -1,4 +1,5 @@
 import React from 'react';
+import { COUNTRIES } from '../../utils/constants';
 
 interface StepDemographicProps {
   data: any;
@@ -13,24 +14,30 @@ export function StepDemographic({ data, updateData }: StepDemographicProps) {
       
       <div>
         <label className="block text-sm font-medium text-gray-700">Nationality</label>
-        <input 
-          type="text" 
-          placeholder="e.g. Pakistani"
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border"
+        <select 
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border bg-white"
           value={data.nationality || ''}
           onChange={(e) => updateData({ nationality: e.target.value })}
-        />
+        >
+          <option value="">Select Nationality</option>
+          {COUNTRIES.map(country => (
+            <option key={country} value={country}>{country}</option>
+          ))}
+        </select>
       </div>
 
       <div>
         <label className="block text-sm font-medium text-gray-700">Country of Residence</label>
-        <input 
-          type="text" 
-          placeholder="e.g. United Arab Emirates"
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border"
+        <select 
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border bg-white"
           value={data.country_of_residence || ''}
           onChange={(e) => updateData({ country_of_residence: e.target.value })}
-        />
+        >
+          <option value="">Select Country</option>
+          {COUNTRIES.map(country => (
+            <option key={country} value={country}>{country}</option>
+          ))}
+        </select>
       </div>
 
       <div>

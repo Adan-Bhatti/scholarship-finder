@@ -5,7 +5,8 @@ import logging
 
 from backend.database import SessionLocal
 from backend.models.user import User
-from backend.models.scholarship import Scholarship, SavedScholarship
+from backend.models.scholarship import Scholarship
+from backend.models.saved import SavedScholarship
 
 logger = logging.getLogger(__name__)
 

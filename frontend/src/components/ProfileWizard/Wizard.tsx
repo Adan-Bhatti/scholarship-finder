@@ -42,11 +42,6 @@ export function Wizard() {
         setError('Graduation year must be between 1900 and 2100.');
         return false;
       }
-      const maxS = data.max_sources !== undefined ? data.max_sources : 5;
-      if (maxS < 1 || maxS > 50) {
-        setError('Max sources must be between 1 and 50.');
-        return false;
-      }
     }
     if (currentStep === 2) {
       if (!data.nationality || !data.nationality.trim()) {

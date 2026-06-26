@@ -1,4 +1,5 @@
 import React from 'react';
+import { FIELDS_OF_STUDY } from '../../utils/constants';
 
 interface StepAcademicProps {
   data: any;
@@ -28,13 +29,16 @@ export function StepAcademic({ data, updateData }: StepAcademicProps) {
 
       <div>
         <label className="block text-sm font-medium text-gray-700">Field of Study</label>
-        <input 
-          type="text" 
-          placeholder="e.g. Computer Science"
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border"
+        <select 
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border bg-white"
           value={data.field_of_study || ''}
           onChange={(e) => updateData({ field_of_study: e.target.value })}
-        />
+        >
+          <option value="">Select Field</option>
+          {FIELDS_OF_STUDY.map(field => (
+            <option key={field} value={field}>{field}</option>
+          ))}
+        </select>
       </div>
 
       <div>
@@ -66,18 +70,6 @@ export function StepAcademic({ data, updateData }: StepAcademicProps) {
         />
       </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Max Sources to Match (1 - 50)</label>
-        <input 
-          type="number" 
-          min="1"
-          max="50"
-          placeholder="e.g. 5"
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border"
-          value={data.max_sources !== undefined ? data.max_sources : 5}
-          onChange={(e) => updateData({ max_sources: parseInt(e.target.value) || 0 })}
-          onWheel={(e) => e.currentTarget.blur()}
-        />
       </div>
     </div>
   );

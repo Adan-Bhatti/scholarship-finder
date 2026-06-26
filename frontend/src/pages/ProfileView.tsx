@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import { Sidebar } from '../components/Dashboard/Sidebar';
 import { profileApi } from '../api/profile';
 import { Profile } from '../types';

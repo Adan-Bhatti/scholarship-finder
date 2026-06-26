@@ -10,6 +10,7 @@ import { ProfileView } from './pages/ProfileView';
 import { NotFound } from './pages/NotFound';
 import { PublicProfile } from './pages/PublicProfile';
 import { AdminDashboard } from './pages/AdminDashboard';
+import { ResetPasswordPage } from './pages/ResetPasswordPage';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { ChatWidget } from './components/ChatWidget';
 
