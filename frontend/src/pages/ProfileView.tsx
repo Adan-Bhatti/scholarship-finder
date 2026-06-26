@@ -3,6 +3,7 @@ import { Sidebar } from '../components/Dashboard/Sidebar';
 import { profileApi } from '../api/profile';
 import { Profile } from '../types';
 import { getIncomeBracketsForCountry } from '../utils/incomeBrackets';
+import { COUNTRIES, FIELDS_OF_STUDY } from '../utils/constants';
 
 export function ProfileView() {
   const [profile, setProfile] = useState<Partial<Profile>>({});
@@ -73,11 +74,6 @@ export function ProfileView() {
       setMessage({ type: 'error', text: 'Graduation year must be between 1900 and 2100.' });
       return;
     }
-    const maxS = profile.max_sources !== undefined ? profile.max_sources : 5;
-    if (maxS < 1 || maxS > 50) {
-      setMessage({ type: 'error', text: 'Max sources must be between 1 and 50.' });
-      return;
-    }
     if (!profile.nationality || !profile.nationality.trim()) {
       setMessage({ type: 'error', text: 'Nationality is required.' });
       return;
@@ -91,6 +87,7 @@ export function ProfileView() {
     try {
       // Exclude read-only fields
       const { id, user_id, updated_at, ...updateData } = profile as any;
+      updateData.max_sources = 10; // Default internally
       
       if (isNewProfile) {
         await profileApi.createProfile(updateData);
@@ -206,7 +203,12 @@ export function ProfileView() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Field of Study</label>
-                  <input type="text" name="field_of_study" value={profile.field_of_study || ''} onChange={handleChange} className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g. Computer Science" />
+                  <select name="field_of_study" value={profile.field_of_study || ''} onChange={handleChange} className="w-full rounded-md border border-gray-300 px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">Select Field</option>
+                    {FIELDS_OF_STUDY.map(field => (
+                      <option key={field} value={field}>{field}</option>
+                    ))}
+                  </select>
                 </div>
 
                 <div>
@@ -220,18 +222,23 @@ export function ProfileView() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Max Sources to Match</label>
-                  <input type="number" name="max_sources" min="1" max="50" value={profile.max_sources !== undefined ? profile.max_sources : 5} onChange={handleChange} onWheel={(e) => e.currentTarget.blur()} className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="5" />
-                </div>
-
-                <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Nationality</label>
-                  <input type="text" name="nationality" value={profile.nationality || ''} onChange={handleChange} className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g. United States" />
+                  <select name="nationality" value={profile.nationality || ''} onChange={handleChange} className="w-full rounded-md border border-gray-300 px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">Select Nationality</option>
+                    {COUNTRIES.map(country => (
+                      <option key={country} value={country}>{country}</option>
+                    ))}
+                  </select>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Country of Residence</label>
-                  <input type="text" name="country_of_residence" value={profile.country_of_residence || ''} onChange={handleChange} className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g. Canada" />
+                  <select name="country_of_residence" value={profile.country_of_residence || ''} onChange={handleChange} className="w-full rounded-md border border-gray-300 px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">Select Country</option>
+                    {COUNTRIES.map(country => (
+                      <option key={country} value={country}>{country}</option>
+                    ))}
+                  </select>
                 </div>
 
                 <div>
