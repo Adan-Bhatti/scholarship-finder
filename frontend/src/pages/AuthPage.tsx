@@ -55,7 +55,8 @@ export function AuthPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-900 flex items-center justify-center px-4">
       <div className="w-full max-w-md">
-        <div className="text-center mb-10">
+        <div className="text-center mb-10 flex flex-col items-center justify-center">
+          <img src="/logo.png" alt="ScholarshipAI Logo" className="w-20 h-20 mb-4 rounded-2xl shadow-lg border border-white/10" />
           <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">
             ScholarshipAI
           </h1>

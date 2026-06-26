@@ -34,7 +34,8 @@ export function Sidebar() {
       animate={{ x: 0, opacity: 1 }}
       className="w-64 h-screen bg-slate-900 text-white flex flex-col fixed left-0 top-0 z-50"
     >
-      <div className="p-6">
+      <div className="p-6 flex items-center">
+        <img src="/logo.png" alt="ScholarshipAI Logo" className="w-10 h-10 mr-3 rounded-xl shadow-lg" />
         <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-emerald-400">
           ScholarshipAI
         </h1>
