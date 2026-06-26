@@ -3,18 +3,22 @@ import { Link } from 'react-router-dom';
 
 export function NotFound() {
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-950 flex flex-col items-center justify-center px-4">
       <div className="text-center">
-        <p className="text-8xl font-extrabold text-blue-600 mb-4">404</p>
-        <h1 className="text-3xl font-bold text-gray-900 mb-3">Page not found</h1>
-        <p className="text-gray-500 mb-8 max-w-md">
-          Sorry, we couldn't find the page you were looking for. It might have been moved or deleted.
+        <div className="relative mb-6">
+          <p className="text-9xl font-extrabold text-white/5 select-none absolute -translate-x-1/2 left-1/2 -top-4">404</p>
+          <p className="text-8xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-400 relative z-10">404</p>
+        </div>
+        <div className="text-5xl mb-4">🔭</div>
+        <h1 className="text-2xl font-bold text-white mb-3">Scholarship Not Found</h1>
+        <p className="text-slate-400 mb-8 max-w-sm text-sm leading-relaxed">
+          This page seems to have wandered off. Let's get you back to discovering opportunities.
         </p>
         <Link
           to="/dashboard"
-          className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors"
+          className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl hover:from-blue-500 hover:to-indigo-500 transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 hover:-translate-y-0.5"
         >
-          Go to Dashboard
+          ← Back to Dashboard
         </Link>
       </div>
     </div>

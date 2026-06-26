@@ -114,28 +114,28 @@ export function Explorer() {
 
           <div className="mb-6 flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-1">Explore Scholarships</h1>
-              <p className="text-gray-500">Search and filter through our global database of opportunities.</p>
+              <h1 className="text-2xl font-bold text-slate-900 mb-0.5">Explore Scholarships</h1>
+              <p className="text-slate-500 text-sm">Search and filter through our global database of opportunities.</p>
             </div>
             <button
               onClick={handleRefreshFeed}
               disabled={loading}
-              className="flex items-center px-4 py-2 bg-white border border-slate-200 text-slate-700 font-medium rounded-lg shadow-sm hover:bg-slate-50 transition-colors disabled:opacity-50"
+              className="flex items-center px-4 py-2 bg-white border border-slate-200 text-slate-700 font-medium rounded-xl shadow-sm hover:bg-slate-50 hover:shadow-md transition-all disabled:opacity-50 text-sm"
             >
-              <RefreshCwIcon size={16} className={`mr-2 ${loading ? 'animate-spin' : ''}`} />
+              <RefreshCwIcon size={14} className={`mr-2 ${loading ? 'animate-spin' : ''}`} />
               Refresh
             </button>
           </div>
 
-          <div className="relative mb-6">
+          <div className="relative mb-4">
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <SearchIcon className="h-5 w-5 text-gray-400" />
+              <SearchIcon className="h-5 w-5 text-slate-400" />
             </div>
             <input
               ref={searchInputRef}
               type="text"
               placeholder="Search by keyword, provider, or title... (Ctrl+K)"
-              className="block w-full pl-11 pr-10 py-4 border-transparent rounded-2xl shadow-sm text-gray-900 bg-white border border-slate-200 focus:border-blue-500 focus:ring-blue-500 sm:text-sm transition-shadow hover:shadow-md"
+              className="block w-full pl-11 pr-10 py-3.5 rounded-2xl shadow-sm text-slate-900 bg-white border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-sm transition-all hover:shadow-md outline-none"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -144,10 +144,43 @@ export function Explorer() {
                 onClick={() => setSearchTerm('')}
                 className="absolute inset-y-0 right-0 pr-4 flex items-center"
               >
-                <XIcon className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                <XIcon className="h-4 w-4 text-slate-400 hover:text-slate-600" />
               </button>
             )}
           </div>
+
+          {/* Active filter pills */}
+          {hasActiveFilters && (
+            <div className="flex flex-wrap gap-2 mb-4">
+              {params.degree && (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded-full border border-blue-100">
+                  🎓 {params.degree}
+                  <button onClick={() => handleFilterChange('degree', undefined)} className="hover:text-blue-900"><XIcon size={10} /></button>
+                </span>
+              )}
+              {params.country && (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-full border border-emerald-100">
+                  🌍 {params.country}
+                  <button onClick={() => handleFilterChange('country', undefined)} className="hover:text-emerald-900"><XIcon size={10} /></button>
+                </span>
+              )}
+              {params.field && (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-purple-50 text-purple-700 text-xs font-semibold rounded-full border border-purple-100">
+                  📚 {params.field}
+                  <button onClick={() => handleFilterChange('field', undefined)} className="hover:text-purple-900"><XIcon size={10} /></button>
+                </span>
+              )}
+              {params.min_amount && (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-50 text-amber-700 text-xs font-semibold rounded-full border border-amber-100">
+                  💰 Min ${params.min_amount.toLocaleString()}
+                  <button onClick={() => handleFilterChange('min_amount', undefined)} className="hover:text-amber-900"><XIcon size={10} /></button>
+                </span>
+              )}
+              <button onClick={handleClearFilters} className="text-xs text-slate-400 hover:text-slate-600 font-medium px-2">
+                Clear all
+              </button>
+            </div>
+          )}
 
           <div className="flex flex-col lg:flex-row gap-6">
 
@@ -233,13 +266,15 @@ export function Explorer() {
               </div>
 
               {data.length === 0 && !loading ? (
-                <div className="flex-1 flex flex-col items-center justify-center bg-white rounded-2xl border border-dashed border-slate-300 p-12 text-center">
-                  <SearchIcon size={48} className="text-slate-300 mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-1">No scholarships found</h3>
-                  <p className="text-gray-500">Try adjusting your search or clearing some filters.</p>
+                <div className="flex-1 flex flex-col items-center justify-center bg-white rounded-2xl border border-dashed border-slate-200 p-12 text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center mb-4 text-3xl">
+                    🔍
+                  </div>
+                  <h3 className="text-base font-semibold text-slate-900 mb-1">No scholarships found</h3>
+                  <p className="text-slate-400 text-sm mb-5">Try adjusting your search terms or removing some filters.</p>
                   <button
                     onClick={handleClearFilters}
-                    className="mt-6 px-4 py-2 bg-blue-50 text-blue-700 rounded-lg font-medium hover:bg-blue-100 transition"
+                    className="px-5 py-2 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors shadow-sm"
                   >
                     Clear all filters
                   </button>
