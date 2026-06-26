@@ -69,8 +69,6 @@ export function StepAcademic({ data, updateData }: StepAcademicProps) {
           onWheel={(e) => e.currentTarget.blur()}
         />
       </div>
-
-      </div>
     </div>
   );
 }
