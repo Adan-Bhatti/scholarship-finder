@@ -7,7 +7,7 @@ import { getMatches, getSavedScholarships } from '../api/scholarships';
 import { getDashboardStats, DashboardStats } from '../api/dashboard';
 import { MatchResult } from '../types';
 import { formatCurrency } from '../utils/currency';
-import { TargetIcon, BookmarkIcon, ClockIcon, BanknoteIcon, AlertCircleIcon, RefreshCwIcon } from 'lucide-react';
+import { TargetIcon, BookmarkIcon, ClockIcon, BanknoteIcon, AlertCircleIcon, RefreshCwIcon, MailWarningIcon, CheckCircle2Icon } from 'lucide-react';
 
 export function Dashboard() {
   const [matches, setMatches] = useState<MatchResult[]>([]);
@@ -15,6 +15,10 @@ export function Dashboard() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isEmailVerified, setIsEmailVerified] = useState<boolean>(() => {
+    return localStorage.getItem('email_verified') === 'true';
+  });
+  const [isVerifying, setIsVerifying] = useState(false);
 
   useEffect(() => {
     // Handle OAuth redirect tokens
@@ -71,12 +75,49 @@ export function Dashboard() {
     }
   };
 
+  const handleVerifyEmail = async () => {
+    setIsVerifying(true);
+    // Simulate API call
+    setTimeout(() => {
+      localStorage.setItem('email_verified', 'true');
+      setIsEmailVerified(true);
+      setIsVerifying(false);
+      toast.success('Email verified successfully! Advanced features unlocked.');
+    }, 1500);
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 flex">
       <Sidebar />
       
       <main className="flex-1 ml-64 p-8">
         <div className="max-w-6xl mx-auto">
+          {!isEmailVerified && (
+            <div className="mb-8 bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-6 text-white shadow-md flex items-center justify-between">
+              <div className="flex items-center">
+                <div className="bg-white/20 p-3 rounded-full mr-4">
+                  <MailWarningIcon size={24} className="text-white" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg mb-1">Verify your email address</h3>
+                  <p className="text-blue-100 text-sm">Please verify your email to unlock all advanced AI matching features.</p>
+                </div>
+              </div>
+              <button 
+                onClick={handleVerifyEmail}
+                disabled={isVerifying}
+                className="bg-white text-blue-700 px-6 py-2.5 rounded-lg font-bold shadow-sm hover:bg-blue-50 transition-colors disabled:opacity-80 flex items-center"
+              >
+                {isVerifying ? (
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600 mr-2"></div>
+                ) : (
+                  <CheckCircle2Icon size={18} className="mr-2" />
+                )}
+                {isVerifying ? 'Verifying...' : 'Verify Now'}
+              </button>
+            </div>
+          )}
+
           {stats && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
               <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center">
