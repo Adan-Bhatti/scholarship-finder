@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Sidebar } from '../components/Dashboard/Sidebar';
 import { ScholarshipCard } from '../components/Dashboard/ScholarshipCard';
 import { searchScholarships, SearchParams, SearchResponse } from '../api/search';
-import { SearchIcon, FilterIcon, XIcon, ChevronDownIcon } from 'lucide-react';
+import { SearchIcon, FilterIcon, XIcon, ChevronDownIcon, RefreshCwIcon } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { Scholarship } from '../types';
 
@@ -86,6 +86,12 @@ export function Explorer() {
     fetchResults();
   }, [params]);
 
+  const handleRefreshFeed = async () => {
+    setData([]);
+    setParams({ ...params, page: 1 });
+    toast.success('Feed refreshed!');
+  };
+
   const handleFilterChange = (key: keyof SearchParams, value: any) => {
     setData([]); // clear data on new filter
     setParams((prev) => ({ ...prev, [key]: value, page: 1 }));
@@ -106,9 +112,19 @@ export function Explorer() {
       <main className="flex-1 ml-64 overflow-y-auto">
         <div className="max-w-7xl mx-auto p-8">
 
-          <div className="mb-6">
-            <h1 className="text-3xl font-bold text-gray-900 mb-1">Explore Scholarships</h1>
-            <p className="text-gray-500">Search and filter through our global database of opportunities.</p>
+          <div className="mb-6 flex justify-between items-center">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-1">Explore Scholarships</h1>
+              <p className="text-gray-500">Search and filter through our global database of opportunities.</p>
+            </div>
+            <button
+              onClick={handleRefreshFeed}
+              disabled={loading}
+              className="flex items-center px-4 py-2 bg-white border border-slate-200 text-slate-700 font-medium rounded-lg shadow-sm hover:bg-slate-50 transition-colors disabled:opacity-50"
+            >
+              <RefreshCwIcon size={16} className={`mr-2 ${loading ? 'animate-spin' : ''}`} />
+              Refresh
+            </button>
           </div>
 
           <div className="relative mb-6">

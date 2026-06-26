@@ -7,7 +7,7 @@ import { getMatches, getSavedScholarships } from '../api/scholarships';
 import { getDashboardStats, DashboardStats } from '../api/dashboard';
 import { MatchResult } from '../types';
 import { formatCurrency } from '../utils/currency';
-import { TargetIcon, BookmarkIcon, ClockIcon, BanknoteIcon, AlertCircleIcon } from 'lucide-react';
+import { TargetIcon, BookmarkIcon, ClockIcon, BanknoteIcon, AlertCircleIcon, RefreshCwIcon } from 'lucide-react';
 
 export function Dashboard() {
   const [matches, setMatches] = useState<MatchResult[]>([]);
@@ -49,9 +49,27 @@ export function Dashboard() {
         setLoading(false);
       }
     }
-    
     fetchData();
   }, []);
+
+  const handleRefreshFeed = async () => {
+    setLoading(true);
+    try {
+      const [matchedData, savedData, statsData] = await Promise.all([
+        getMatches(),
+        getSavedScholarships(),
+        getDashboardStats()
+      ]);
+      setMatches(matchedData);
+      setSavedIds(new Set(savedData.map(s => s.scholarship?.id || s.id)));
+      setStats(statsData);
+      toast.success('Dashboard refreshed!');
+    } catch (err: any) {
+      toast.error('Failed to refresh dashboard');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 flex">
@@ -102,9 +120,19 @@ export function Dashboard() {
             </div>
           )}
 
-          <div className="mb-8">
-            <h2 className="text-3xl font-bold text-gray-900">Recommended for You</h2>
-            <p className="text-gray-500 mt-2">Based on your academic profile and preferences</p>
+          <div className="mb-8 flex justify-between items-center">
+            <div>
+              <h2 className="text-3xl font-bold text-gray-900">Recommended for You</h2>
+              <p className="text-gray-500 mt-2">Based on your academic profile and preferences</p>
+            </div>
+            <button
+              onClick={handleRefreshFeed}
+              disabled={loading}
+              className="flex items-center px-4 py-2 bg-white border border-slate-200 text-slate-700 font-medium rounded-lg shadow-sm hover:bg-slate-50 transition-colors disabled:opacity-50"
+            >
+              <RefreshCwIcon size={16} className={`mr-2 ${loading ? 'animate-spin' : ''}`} />
+              Refresh
+            </button>
           </div>
 
           {loading ? (
