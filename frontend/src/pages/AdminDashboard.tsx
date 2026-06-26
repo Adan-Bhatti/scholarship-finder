@@ -2,7 +2,18 @@ import React, { useState } from 'react';
 import { Sidebar } from '../components/Dashboard/Sidebar';
 import { apiClient } from '../api/client';
 import toast from 'react-hot-toast';
-import { PlayIcon, CheckCircleIcon, ShieldIcon } from 'lucide-react';
+import { PlayIcon, CheckCircleIcon, ShieldIcon, BarChart3Icon } from 'lucide-react';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+
+const mockAnalyticsData = [
+  { name: 'Mon', scholarships: 120, users: 40 },
+  { name: 'Tue', scholarships: 250, users: 55 },
+  { name: 'Wed', scholarships: 400, users: 80 },
+  { name: 'Thu', scholarships: 380, users: 95 },
+  { name: 'Fri', scholarships: 510, users: 110 },
+  { name: 'Sat', scholarships: 700, users: 140 },
+  { name: 'Sun', scholarships: 890, users: 180 },
+];
 
 export function AdminDashboard() {
   const [isRunning, setIsRunning] = useState(false);
@@ -74,6 +85,42 @@ export function AdminDashboard() {
               >
                 Trigger Deadline Reminders
             </button>
+          </div>
+
+          {/* New Analytics Section */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 mt-6">
+            <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
+              <BarChart3Icon className="mr-2 text-indigo-600" size={24} />
+              System Growth Analytics
+            </h3>
+            
+            <div className="h-80 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart
+                  data={mockAnalyticsData}
+                  margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                >
+                  <defs>
+                    <linearGradient id="colorScholarships" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                    </linearGradient>
+                    <linearGradient id="colorUsers" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <XAxis dataKey="name" stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
+                  <YAxis stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                  <Tooltip 
+                    contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                  />
+                  <Area type="monotone" dataKey="scholarships" stroke="#3b82f6" strokeWidth={3} fillOpacity={1} fill="url(#colorScholarships)" name="Scholarships Scraped" />
+                  <Area type="monotone" dataKey="users" stroke="#10b981" strokeWidth={3} fillOpacity={1} fill="url(#colorUsers)" name="Active Users" />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </div>
       </main>
