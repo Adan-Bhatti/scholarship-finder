@@ -10,6 +10,7 @@ from backend.core.limiter import limiter
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 from backend.routers.scraper import run_scraper_background
+from backend.scraper.http_runner import run_all_scrapers
 from backend.tasks.email_tasks import send_deadline_reminders
 
 logger = logging.getLogger(__name__)
@@ -38,10 +39,10 @@ scheduler = BackgroundScheduler()
 @app.on_event("startup")
 def start_scheduler():
     scheduler.add_job(
-        run_scraper_background,
+        run_all_scrapers,
         trigger=IntervalTrigger(hours=24),
         id="run_scraper_daily",
-        name="Scrape Scholarships Every 24h",
+        name="Scrape Scholarships Every 24h (Lightweight)",
         replace_existing=True
     )
     scheduler.add_job(
