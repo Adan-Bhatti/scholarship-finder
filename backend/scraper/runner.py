@@ -23,6 +23,7 @@ def run_all_spiders():
     process.crawl('daad')
     process.crawl('bold')
     process.crawl('careeronestop')
+    process.crawl('scholars4dev')
     # New international sources
     process.crawl('gates_cambridge')
     process.crawl('australia_awards')
