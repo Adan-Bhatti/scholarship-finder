@@ -53,18 +53,18 @@ export function AuthPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-900 flex items-center justify-center px-4">
+    <div className="min-h-[100dvh] bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-900 flex items-center justify-center px-4 py-6">
       <div className="w-full max-w-md">
-        <div className="text-center mb-10 flex flex-col items-center justify-center">
-          <img src="/logo.png" alt="ScholarshipAI Logo" className="w-20 h-20 mb-4 rounded-2xl shadow-lg border border-white/10" />
-          <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">
+        <div className="text-center mb-6 flex flex-col items-center justify-center">
+          <img src="/logo.png" alt="ScholarshipAI Logo" className="w-16 h-16 mb-2 rounded-2xl shadow-lg border border-white/10" />
+          <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">
             ScholarshipAI
           </h1>
-          <p className="text-slate-400 mt-2 text-sm">AI-powered scholarship matching</p>
+          <p className="text-slate-400 mt-1 text-sm">AI-powered scholarship matching</p>
         </div>
 
-        <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-8 shadow-2xl">
-          <div className="flex rounded-lg bg-white/10 p-1 mb-8">
+        <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 shadow-2xl">
+          <div className="flex rounded-lg bg-white/10 p-1 mb-6">
             <button
               onClick={() => setMode('login')}
               className={`flex-1 py-2 text-sm font-semibold rounded-md transition-all ${
@@ -83,7 +83,7 @@ export function AuthPage() {
             </button>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-2">Email address</label>
               <input
