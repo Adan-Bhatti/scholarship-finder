@@ -761,6 +761,102 @@ def scrape_swiss_govt(db) -> int:
     return _save(db, items)
 
 
+def scrape_misc_10(db) -> int:
+    items = [
+        {
+            "title": "Eiffel Excellence Scholarship",
+            "provider": "French Ministry for Europe and Foreign Affairs",
+            "amount_min": 1181, "amount_max": 1700, "currency": "EUR",
+            "degree_levels": ["Masters", "PhD"], "fields_of_study": ["Any Field"],
+            "eligible_nationalities": ["International"], "eligible_countries": ["France"],
+            "description": "The Eiffel Excellence Scholarship Program was established to enable French higher education institutions to attract top foreign students.",
+            "source_url": "https://www.campusfrance.org/en/eiffel-scholarship-program-of-excellence", "source_name": "eiffel"
+        },
+        {
+            "title": "Swedish Institute Scholarships",
+            "provider": "Swedish Institute",
+            "amount_min": 11000, "amount_max": 11000, "currency": "SEK",
+            "degree_levels": ["Masters"], "fields_of_study": ["Any Field"],
+            "eligible_nationalities": ["Developing Countries"], "eligible_countries": ["Sweden"],
+            "description": "Scholarships for global professionals from eligible countries to study in Sweden.",
+            "source_url": "https://si.se/en/apply/scholarships/", "source_name": "swedish_institute"
+        },
+        {
+            "title": "Manaaki New Zealand Scholarships",
+            "provider": "New Zealand Government",
+            "amount_min": 30000, "amount_max": 50000, "currency": "NZD",
+            "degree_levels": ["Bachelors", "Masters", "PhD"], "fields_of_study": ["Any Field"],
+            "eligible_nationalities": ["Developing Countries"], "eligible_countries": ["New Zealand"],
+            "description": "Full scholarships for international students from eligible developing countries.",
+            "source_url": "https://www.nzscholarships.govt.nz/", "source_name": "manaaki_nz"
+        },
+        {
+            "title": "Schwarzman Scholars",
+            "provider": "Tsinghua University",
+            "amount_min": 30000, "amount_max": 60000, "currency": "USD",
+            "degree_levels": ["Masters"], "fields_of_study": ["Global Affairs"],
+            "eligible_nationalities": ["International"], "eligible_countries": ["China"],
+            "description": "A fully funded master's degree program at Tsinghua University in Beijing.",
+            "source_url": "https://www.schwarzmanscholars.org/", "source_name": "schwarzman"
+        },
+        {
+            "title": "Knight-Hennessy Scholars",
+            "provider": "Stanford University",
+            "amount_min": 40000, "amount_max": 90000, "currency": "USD",
+            "degree_levels": ["Masters", "PhD"], "fields_of_study": ["Any Field"],
+            "eligible_nationalities": ["International"], "eligible_countries": ["United States"],
+            "description": "Full funding for graduate students at Stanford University across all disciplines.",
+            "source_url": "https://knight-hennessy.stanford.edu/", "source_name": "knight_hennessy"
+        },
+        {
+            "title": "Clarendon Fund Scholarships",
+            "provider": "University of Oxford",
+            "amount_min": 17000, "amount_max": 35000, "currency": "GBP",
+            "degree_levels": ["Masters", "PhD"], "fields_of_study": ["Any Field"],
+            "eligible_nationalities": ["International"], "eligible_countries": ["United Kingdom"],
+            "description": "The Clarendon Fund offers fully-funded scholarships at the University of Oxford based on academic excellence.",
+            "source_url": "https://www.ox.ac.uk/clarendon", "source_name": "clarendon"
+        },
+        {
+            "title": "Banting Postdoctoral Fellowships",
+            "provider": "Government of Canada",
+            "amount_min": 70000, "amount_max": 70000, "currency": "CAD",
+            "degree_levels": ["Postdoc"], "fields_of_study": ["Science", "Engineering", "Health", "Social Sciences"],
+            "eligible_nationalities": ["International", "Canadian"], "eligible_countries": ["Canada"],
+            "description": "The Banting Postdoctoral Fellowships program provides funding to the very best postdoctoral applicants.",
+            "source_url": "https://banting.fellowships-bourses.gc.ca/en/home-accueil.html", "source_name": "banting"
+        },
+        {
+            "title": "Joint Japan World Bank Graduate Scholarship",
+            "provider": "World Bank & Government of Japan",
+            "amount_min": 30000, "amount_max": 50000, "currency": "USD",
+            "degree_levels": ["Masters"], "fields_of_study": ["Development", "Economics"],
+            "eligible_nationalities": ["Developing Countries"], "eligible_countries": ["United States", "Japan", "United Kingdom"],
+            "description": "Scholarships for students from developing countries to study development-related topics.",
+            "source_url": "https://www.worldbank.org/en/programs/scholarships", "source_name": "jjwbgsp"
+        },
+        {
+            "title": "OFID Scholarship Award",
+            "provider": "OPEC Fund for International Development",
+            "amount_min": 50000, "amount_max": 50000, "currency": "USD",
+            "degree_levels": ["Masters"], "fields_of_study": ["Development", "Economics", "Science", "Engineering"],
+            "eligible_nationalities": ["Developing Countries"], "eligible_countries": ["Any Country"],
+            "description": "Fully funded scholarship to support outstanding young students from developing countries.",
+            "source_url": "https://opecfund.org/about-us/careers", "source_name": "ofid"
+        },
+        {
+            "title": "Heinrich Böll Foundation Scholarships",
+            "provider": "Heinrich Böll Foundation",
+            "amount_min": 934, "amount_max": 1200, "currency": "EUR",
+            "degree_levels": ["Masters", "PhD"], "fields_of_study": ["Any Field", "STEM"],
+            "eligible_nationalities": ["International"], "eligible_countries": ["Germany"],
+            "description": "Scholarships for international students who gained their university entrance qualification outside Germany.",
+            "source_url": "https://www.boell.de/en/scholarships", "source_name": "heinrich_boell"
+        }
+    ]
+    return _save(db, items)
+
+
 # ---------------------------------------------------------------------------
 # Main entry point - runs all scrapers
 # ---------------------------------------------------------------------------
@@ -786,6 +882,7 @@ ALL_SCRAPERS = [
     ("Korean KGSP", scrape_kgsp),
     ("Swiss Government", scrape_swiss_govt),
     ("Scholars4Dev", scrape_scholars4dev),
+    ("Misc 10", scrape_misc_10),
 ]
 
 
