@@ -26,13 +26,21 @@ _HEADERS = {
     "Accept-Language": "en-US,en;q=0.9",
 }
 
-def _get(url: str, timeout: int = 20) -> Optional[BeautifulSoup]:
-    try:
-        r = httpx.get(url, headers=_HEADERS, timeout=timeout, follow_redirects=True)
-        if r.status_code == 200:
-            return BeautifulSoup(r.text, "html.parser")
-    except Exception as e:
-        logger.warning(f"Failed to fetch {url}: {e}")
+import time
+
+def _get(url: str, timeout: int = 20, max_retries: int = 3) -> Optional[BeautifulSoup]:
+    for attempt in range(max_retries):
+        try:
+            r = httpx.get(url, headers=_HEADERS, timeout=timeout, follow_redirects=True)
+            if r.status_code == 200:
+                return BeautifulSoup(r.text, "html.parser")
+            elif r.status_code in (429, 500, 502, 503, 504):
+                time.sleep(2 ** attempt)
+                continue
+        except Exception as e:
+            logger.warning(f"Attempt {attempt + 1} failed to fetch {url}: {e}")
+            if attempt < max_retries - 1:
+                time.sleep(2 ** attempt)
     return None
 
 
@@ -43,8 +51,14 @@ def _save(db, items: list[dict]):
     for item in items:
         title = item.get("title", "").strip()
         provider = item.get("provider", "").strip()
+        deadline = item.get("deadline")
+        
         if not title or not provider:
             continue
+            
+        if deadline and deadline < datetime.utcnow():
+            continue  # Skip past deadlines
+            
         existing = db.query(Scholarship).filter(
             Scholarship.title == title,
             Scholarship.provider == provider
