@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
-from backend.routers import auth, profile, scholarships, health, ai, dashboard, scraper
+from backend.routers import auth, profile, scholarships, health, ai, dashboard, scraper, sources
 from backend.core.exceptions import BaseAPIException
 import logging
 from slowapi import _rate_limit_exceeded_handler
@@ -12,6 +12,8 @@ from apscheduler.triggers.interval import IntervalTrigger
 from backend.routers.scraper import run_scraper_background
 from backend.scraper.http_runner import run_all_scrapers
 from backend.tasks.email_tasks import send_deadline_reminders
+from backend.scraper.source_discovery import discover_sources
+from backend.scraper.dynamic_scraper import run_dynamic_scraper
 
 logger = logging.getLogger(__name__)
 
@@ -50,6 +52,20 @@ def start_scheduler():
         trigger=IntervalTrigger(hours=24),
         id="send_email_reminders_daily",
         name="Send Deadline Reminders Every 24h",
+        replace_existing=True
+    )
+    scheduler.add_job(
+        discover_sources,
+        trigger=IntervalTrigger(hours=48),
+        id="discover_sources_weekly",
+        name="Discover new scholarship sources via DuckDuckGo",
+        replace_existing=True
+    )
+    scheduler.add_job(
+        run_dynamic_scraper,
+        trigger=IntervalTrigger(hours=12),
+        id="dynamic_scraper_daily",
+        name="Dynamically scrape discovered sources using AI",
         replace_existing=True
     )
     scheduler.start()
@@ -103,3 +119,4 @@ app.include_router(scholarships.router)
 app.include_router(ai.router)
 app.include_router(dashboard.router)
 app.include_router(scraper.router)
+app.include_router(sources.router)

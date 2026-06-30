@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Sidebar } from '../components/Dashboard/Sidebar';
 import { apiClient } from '../api/client';
 import toast from 'react-hot-toast';
-import { PlayIcon, CheckCircleIcon, ShieldIcon, BarChart3Icon } from 'lucide-react';
+import { PlayIcon, CheckCircleIcon, ShieldIcon, BarChart3Icon, SearchIcon, BotIcon } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 const mockAnalyticsData = [
@@ -17,6 +17,32 @@ const mockAnalyticsData = [
 
 export function AdminDashboard() {
   const [isRunning, setIsRunning] = useState(false);
+  const [isDiscovering, setIsDiscovering] = useState(false);
+  const [isDynamicScraping, setIsDynamicScraping] = useState(false);
+
+  const handleDiscoverSources = async () => {
+    setIsDiscovering(true);
+    try {
+      await apiClient.post('/sources/discover');
+      toast.success('Source discovery started in background!');
+    } catch (err: any) {
+      toast.error('Failed to start source discovery.');
+    } finally {
+      setIsDiscovering(false);
+    }
+  };
+
+  const handleDynamicScrape = async () => {
+    setIsDynamicScraping(true);
+    try {
+      await apiClient.post('/sources/scrape');
+      toast.success('Dynamic scraping started in background!');
+    } catch (err: any) {
+      toast.error('Failed to start dynamic scraping.');
+    } finally {
+      setIsDynamicScraping(false);
+    }
+  };
 
   const handleRunScraper = async () => {
     setIsRunning(true);
@@ -65,6 +91,39 @@ export function AdminDashboard() {
                 <CheckCircleIcon size={16} className="text-green-500 mr-1" />
                 Ready to scrape
               </div>
+            </div>
+          </div>
+
+          <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700/50 p-8 mt-6">
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Producer-Consumer AI Engine</h3>
+            <p className="text-sm text-gray-500 dark:text-slate-400 mb-6">Discover new scholarship sources using DuckDuckGo (Producer), and dynamically extract scholarship details from unknown websites using Groq LLM (Consumer).</p>
+            
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              <button
+                onClick={handleDiscoverSources}
+                disabled={isDiscovering}
+                className="flex items-center bg-indigo-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-indigo-700 disabled:opacity-50 transition-colors"
+              >
+                {isDiscovering ? (
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                ) : (
+                  <SearchIcon size={20} className="mr-2" />
+                )}
+                {isDiscovering ? 'Discovering...' : 'Discover Sources'}
+              </button>
+
+              <button
+                onClick={handleDynamicScrape}
+                disabled={isDynamicScraping}
+                className="flex items-center bg-purple-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-purple-700 disabled:opacity-50 transition-colors"
+              >
+                {isDynamicScraping ? (
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                ) : (
+                  <BotIcon size={20} className="mr-2" />
+                )}
+                {isDynamicScraping ? 'Scraping...' : 'Run Dynamic AI Scraper'}
+              </button>
             </div>
           </div>
 
