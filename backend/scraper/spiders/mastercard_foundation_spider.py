@@ -9,7 +9,8 @@ class MastercardFoundationSpider(BaseScholarshipSpider):
     allowed_domains = ["mastercardfdn.org", "scholars.mastercardfdn.org"]
     start_urls = ["https://mastercardfdn.org/all-programs/scholars-program/"]
 
-    def parse(self, response):
+    def parse(self, response: scrapy.http.Response):
+        """Parse Mastercard Foundation page and extract details."""
         deadline_text = response.css(".deadline, time::text").get(default="")
         desc_parts = response.css(".entry-content p::text, main p::text").getall()
         description = " ".join(desc_parts[:3]).strip()
