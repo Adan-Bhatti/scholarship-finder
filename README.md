@@ -260,8 +260,9 @@ The API is fully documented via Swagger UI. Run the backend and visit `http://lo
 | `POST` | `/match/chat` | ✅ | Chat with AI scholarship advisor |
 | `GET` | `/dashboard/stats` | ✅ | Get your personal dashboard statistics |
 | `GET` | `/sources` | ✅ | List auto-discovered scholarship sources |
-| `POST` | `/sources/trigger-discovery` | ✅ | Manually run the source discovery producer |
-| `POST` | `/scraper/run` | ✅ | Manually trigger the scholarship scraper |
+| `POST` | `/sources/discover` | ✅ | Manually run the source discovery producer |
+| `POST` | `/sources/scrape` | ✅ | Manually trigger the dynamic AI scraper |
+| `POST` | `/scraper/run` | ✅ | Manually trigger the static scholarship scraper |
 
 ---
 
