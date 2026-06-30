@@ -58,22 +58,40 @@ def chat_with_ai(
     if not profile:
         raise HTTPException(status_code=400, detail="Profile not found. Please complete onboarding.")
         
-    from sqlalchemy import func, or_
-    # Simple search to get context
-    q = body.query
-    ts_vector = func.to_tsvector('english', Scholarship.title + ' ' + func.coalesce(Scholarship.description, ''))
-    ts_query = func.plainto_tsquery('english', q)
+    from sqlalchemy import or_
+    from backend.database import DATABASE_URL
+
+    # Use SQLite-compatible search (LIKE) — fallback from pg full-text search
+    q_terms = body.query.split()
     
-    scholarships = db.query(Scholarship).filter(
-        Scholarship.is_active == True,
-        or_(
-            ts_vector.op('@@')(ts_query),
-            Scholarship.title.ilike(f"%{q}%")
-        )
-    ).limit(5).all()
+    if DATABASE_URL.startswith("sqlite"):
+        # SQLite: simple LIKE search
+        filters = [
+            or_(
+                Scholarship.title.ilike(f"%{term}%"),
+                Scholarship.description.ilike(f"%{term}%")
+            )
+            for term in q_terms[:3]
+        ]
+        scholarships = db.query(Scholarship).filter(
+            Scholarship.is_active == True,
+            *filters
+        ).limit(5).all()
+    else:
+        # PostgreSQL: full-text search
+        from sqlalchemy import func
+        ts_vector = func.to_tsvector('english', Scholarship.title + ' ' + func.coalesce(Scholarship.description, ''))
+        ts_query = func.plainto_tsquery('english', body.query)
+        scholarships = db.query(Scholarship).filter(
+            Scholarship.is_active == True,
+            or_(
+                ts_vector.op('@@')(ts_query),
+                Scholarship.title.ilike(f"%{body.query}%")
+            )
+        ).limit(5).all()
 
     if not scholarships:
-        # If no direct matches, just get some top ones based on profile degree
+        # Fallback: get top scholarships matching profile degree level
         scholarships = db.query(Scholarship).filter(
             Scholarship.is_active == True
         ).limit(3).all()
