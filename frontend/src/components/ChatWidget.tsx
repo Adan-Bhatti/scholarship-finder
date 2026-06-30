@@ -109,10 +109,10 @@ export function ChatWidget() {
 
       {/* Chat panel */}
       {isOpen && (
-        <div className="fixed bottom-6 right-6 w-[360px] bg-white border border-slate-200 rounded-3xl shadow-2xl flex flex-col overflow-hidden z-50"
+        <div className="fixed bottom-6 right-6 w-[360px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/50 rounded-3xl shadow-2xl flex flex-col overflow-hidden z-50"
           style={{ maxHeight: 'calc(100vh - 5rem)' }}>
           {/* Header */}
-          <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-4 flex justify-between items-center">
+          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 px-5 py-4 flex justify-between items-center">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center">
                 <SparklesIcon size={16} className="text-white" />
@@ -134,13 +134,13 @@ export function ChatWidget() {
           </div>
 
           {/* Messages */}
-          <div className="flex-1 p-4 overflow-y-auto bg-slate-50 flex flex-col gap-3 min-h-[280px] max-h-[380px]">
+          <div className="flex-1 p-4 overflow-y-auto bg-slate-50 dark:bg-slate-950 flex flex-col gap-3 min-h-[280px] max-h-[380px]">
             {messages.map(msg => (
               <div key={msg.id} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
                 <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
                   msg.role === 'user'
-                    ? 'bg-gradient-to-br from-blue-600 to-indigo-600 text-white rounded-br-sm shadow-sm shadow-blue-500/20'
-                    : 'bg-white border border-slate-100 text-slate-800 rounded-bl-sm shadow-sm'
+                    ? 'bg-gradient-to-br from-indigo-600 to-purple-600 text-white rounded-br-sm shadow-sm shadow-indigo-500/20'
+                    : 'bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700/50 text-slate-800 dark:text-slate-200 rounded-bl-sm shadow-sm'
                 }`}>
                   {msg.content}
                 </div>
@@ -150,7 +150,7 @@ export function ChatWidget() {
 
             {isLoading && (
               <div className="flex items-start">
-                <div className="bg-white border border-slate-100 rounded-2xl rounded-bl-sm shadow-sm">
+                <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700/50 rounded-2xl rounded-bl-sm shadow-sm">
                   <TypingIndicator />
                 </div>
               </div>
@@ -160,7 +160,7 @@ export function ChatWidget() {
 
           {/* Quick prompts — show only when few messages */}
           {messages.length <= 2 && !isLoading && (
-            <div className="px-4 pb-2 flex gap-1.5 flex-wrap bg-slate-50 border-t border-slate-100 pt-2">
+            <div className="px-4 pb-2 flex gap-1.5 flex-wrap bg-slate-50 dark:bg-slate-950 border-t border-slate-100 dark:border-slate-800 pt-2">
               {quickPrompts.map((prompt) => (
                 <button
                   key={prompt}
@@ -168,7 +168,7 @@ export function ChatWidget() {
                     setInput(prompt);
                     inputRef.current?.focus();
                   }}
-                  className="text-xs bg-white border border-slate-200 text-slate-600 rounded-lg px-2.5 py-1 hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700 transition-colors"
+                  className="text-xs bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 rounded-lg px-2.5 py-1 hover:bg-indigo-50 dark:hover:bg-slate-700 hover:border-indigo-200 dark:hover:border-slate-600 hover:text-indigo-700 dark:hover:text-indigo-400 transition-colors"
                 >
                   {prompt}
                 </button>
@@ -177,7 +177,7 @@ export function ChatWidget() {
           )}
 
           {/* Input */}
-          <div className="p-3 bg-white border-t border-slate-100">
+          <div className="p-3 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800">
             <form onSubmit={handleSubmit} className="flex gap-2">
               <input
                 ref={inputRef}
@@ -185,7 +185,7 @@ export function ChatWidget() {
                 value={input}
                 onChange={e => setInput(e.target.value)}
                 placeholder="Ask about scholarships..."
-                className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-400 transition-all text-slate-800 placeholder-slate-400"
+                className="flex-1 bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-400 transition-all text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500"
                 disabled={isLoading}
               />
               <button

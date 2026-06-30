@@ -31,21 +31,21 @@ export function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex">
       <Sidebar />
       <main className="flex-1 ml-64 p-8">
         <div className="max-w-4xl mx-auto">
           <div className="mb-8">
-            <h2 className="text-3xl font-bold text-gray-900 flex items-center">
-              <ShieldIcon className="mr-3 text-blue-600" size={32} />
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white font-display flex items-center">
+              <ShieldIcon className="mr-3 text-indigo-600 dark:text-indigo-400" size={32} />
               Admin Dashboard
             </h2>
-            <p className="text-gray-500 mt-2">Manage backend tasks and data sources.</p>
+            <p className="text-gray-500 dark:text-slate-400 mt-2">Manage backend tasks and data sources.</p>
           </div>
           
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
-            <h3 className="text-xl font-bold text-gray-900 mb-4">Web Scraper Control</h3>
-            <p className="text-sm text-gray-500 mb-6">Trigger the Scrapy spiders to fetch new scholarships from configured sources (Fastweb, Scholarships.com, etc.). The scraper runs in the background and saves directly to the database.</p>
+          <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700/50 p-8">
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Web Scraper Control</h3>
+            <p className="text-sm text-gray-500 dark:text-slate-400 mb-6">Trigger the Scrapy spiders to fetch new scholarships from configured sources (Fastweb, Scholarships.com, etc.). The scraper runs in the background and saves directly to the database.</p>
             
             <div className="flex items-center gap-4">
               <button
@@ -68,9 +68,9 @@ export function AdminDashboard() {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 mt-6">
-            <h3 className="text-xl font-bold text-gray-900 mb-4">Email Notifications</h3>
-            <p className="text-sm text-gray-500 mb-6">Manually trigger the deadline reminder job. This job normally runs daily at 8:00 AM via Celery beat.</p>
+          <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700/50 p-8 mt-6">
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Email Notifications</h3>
+            <p className="text-sm text-gray-500 dark:text-slate-400 mb-6">Manually trigger the deadline reminder job. This job normally runs daily at 8:00 AM via Celery beat.</p>
             
             <button
                 onClick={async () => {
@@ -88,9 +88,9 @@ export function AdminDashboard() {
           </div>
 
           {/* New Analytics Section */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 mt-6">
-            <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
-              <BarChart3Icon className="mr-2 text-indigo-600" size={24} />
+          <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700/50 p-8 mt-6">
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
+              <BarChart3Icon className="mr-2 text-indigo-600 dark:text-indigo-400" size={24} />
               System Growth Analytics
             </h3>
             
