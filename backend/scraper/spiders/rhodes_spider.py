@@ -9,7 +9,8 @@ class RhodesSpider(BaseScholarshipSpider):
     allowed_domains = ["rhodeshouse.ox.ac.uk"]
     start_urls = ["https://www.rhodeshouse.ox.ac.uk/scholarships/"]
 
-    def parse(self, response):
+    def parse(self, response: scrapy.http.Response):
+        """Parse Rhodes Scholarship page and extract details."""
         deadline_text = response.css(".deadline, time::text, .application-deadline::text").get(default="")
         desc_parts = response.css(".hero-text p::text, main p::text, .content p::text").getall()
         description = " ".join(desc_parts[:3]).strip()
