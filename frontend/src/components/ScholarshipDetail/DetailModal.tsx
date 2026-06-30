@@ -56,55 +56,55 @@ export function DetailModal({ scholarship, onClose }: DetailModalProps) {
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 dark:bg-slate-950/80 backdrop-blur-sm"
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto relative">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto relative border border-transparent dark:border-slate-700/50">
         <button 
           onClick={onClose}
           aria-label="Close modal"
-          className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors z-10"
+          className="absolute top-4 right-4 p-2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-full transition-colors z-10"
         >
           <XIcon size={24} />
         </button>
 
         <div className="p-8">
           <div className="mb-6 pr-12">
-            <h2 className="text-3xl font-bold text-gray-900 leading-tight mb-2">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white font-display leading-tight mb-2">
               {scholarship.title}
             </h2>
-            <p className="text-lg font-medium text-blue-600">
+            <p className="text-lg font-medium text-indigo-600 dark:text-indigo-400">
               {scholarship.provider}
             </p>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-              <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">Amount</p>
-              <p className="font-bold text-gray-900 text-sm">{formatAmount()}</p>
+            <div className="bg-slate-50 dark:bg-slate-800/60 p-4 rounded-xl border border-slate-100 dark:border-slate-700/50">
+              <p className="text-xs text-gray-500 dark:text-slate-400 uppercase tracking-wider font-semibold mb-1">Amount</p>
+              <p className="font-bold text-gray-900 dark:text-white text-sm">{formatAmount()}</p>
               {scholarship.currency && scholarship.currency !== 'USD' && (
-                <p className="text-xs text-gray-400 mt-1">{scholarship.currency} currency</p>
+                <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">{scholarship.currency} currency</p>
               )}
             </div>
-            <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-              <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">Deadline</p>
-              <p className="font-bold text-gray-900 text-sm">{formatDate(scholarship.deadline)}</p>
+            <div className="bg-slate-50 dark:bg-slate-800/60 p-4 rounded-xl border border-slate-100 dark:border-slate-700/50">
+              <p className="text-xs text-gray-500 dark:text-slate-400 uppercase tracking-wider font-semibold mb-1">Deadline</p>
+              <p className="font-bold text-gray-900 dark:text-white text-sm">{formatDate(scholarship.deadline)}</p>
             </div>
-            <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-              <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">Min GPA</p>
-              <p className="font-bold text-gray-900">{scholarship.gpa_requirement ? scholarship.gpa_requirement.toFixed(1) : 'None'}</p>
+            <div className="bg-slate-50 dark:bg-slate-800/60 p-4 rounded-xl border border-slate-100 dark:border-slate-700/50">
+              <p className="text-xs text-gray-500 dark:text-slate-400 uppercase tracking-wider font-semibold mb-1">Min GPA</p>
+              <p className="font-bold text-gray-900 dark:text-white">{scholarship.gpa_requirement ? scholarship.gpa_requirement.toFixed(1) : 'None'}</p>
             </div>
-            <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-              <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1">Renewable</p>
-              <p className="font-bold text-gray-900">{scholarship.renewable ? 'Yes ✓' : 'No'}</p>
+            <div className="bg-slate-50 dark:bg-slate-800/60 p-4 rounded-xl border border-slate-100 dark:border-slate-700/50">
+              <p className="text-xs text-gray-500 dark:text-slate-400 uppercase tracking-wider font-semibold mb-1">Renewable</p>
+              <p className="font-bold text-gray-900 dark:text-white">{scholarship.renewable ? 'Yes ✓' : 'No'}</p>
             </div>
           </div>
 
           {/* AI Explainer Section */}
-          <div className="mb-8 rounded-xl bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-100 overflow-hidden">
-            <div className="bg-indigo-100/50 px-6 py-3 border-b border-indigo-100 flex items-center">
-              <SparklesIcon size={20} className="text-indigo-600 mr-2" />
-              <h3 className="font-semibold text-indigo-900">AI Eligibility Assessment</h3>
+          <div className="mb-8 rounded-xl bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-indigo-900/20 dark:to-blue-900/20 border border-indigo-100 dark:border-indigo-800/30 overflow-hidden">
+            <div className="bg-indigo-100/50 dark:bg-indigo-900/40 px-6 py-3 border-b border-indigo-100 dark:border-indigo-800/30 flex items-center">
+              <SparklesIcon size={20} className="text-indigo-600 dark:text-indigo-400 mr-2" />
+              <h3 className="font-semibold text-indigo-900 dark:text-indigo-300">AI Eligibility Assessment</h3>
             </div>
             <div className="p-6">
               {loading ? (
@@ -126,26 +126,26 @@ export function DetailModal({ scholarship, onClose }: DetailModalProps) {
                   </div>
                 </div>
               ) : error ? (
-                <p className="text-red-500">{error}</p>
+                <p className="text-red-500 dark:text-red-400">{error}</p>
               ) : aiData ? (
                 <div className="space-y-6">
-                  <p className="text-gray-800 leading-relaxed text-lg">
+                  <p className="text-gray-800 dark:text-slate-200 leading-relaxed text-lg">
                     {aiData.explanation}
                   </p>
                   
                   {aiData.checklist && aiData.checklist.length > 0 && (
                     <div>
-                      <h4 className="font-semibold text-indigo-900 mb-3 flex items-center">
+                      <h4 className="font-semibold text-indigo-900 dark:text-indigo-300 mb-3 flex items-center">
                         <CheckCircleIcon size={18} className="mr-2" />
                         Next Steps
                       </h4>
                       <ul className="space-y-2">
                         {aiData.checklist.map((item, idx) => (
                           <li key={idx} className="flex items-start">
-                            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-xs font-bold mr-3 mt-0.5">
+                            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xs font-bold mr-3 mt-0.5">
                               {idx + 1}
                             </span>
-                            <span className="text-gray-700">{item}</span>
+                            <span className="text-gray-700 dark:text-slate-300">{item}</span>
                           </li>
                         ))}
                       </ul>
@@ -159,8 +159,8 @@ export function DetailModal({ scholarship, onClose }: DetailModalProps) {
           <div className="space-y-8">
             {scholarship.description && (
               <section>
-                <h3 className="text-xl font-bold text-gray-900 mb-3 border-b pb-2">Overview</h3>
-                <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 border-b border-slate-200 dark:border-slate-700/50 pb-2">Overview</h3>
+                <p className="text-gray-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">
                   {scholarship.description}
                 </p>
               </section>
@@ -168,19 +168,19 @@ export function DetailModal({ scholarship, onClose }: DetailModalProps) {
 
             {scholarship.eligibility_text && (
               <section>
-                <h3 className="text-xl font-bold text-gray-900 mb-3 border-b pb-2">Eligibility</h3>
-                <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 border-b border-slate-200 dark:border-slate-700/50 pb-2">Eligibility</h3>
+                <p className="text-gray-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">
                   {scholarship.eligibility_text}
                 </p>
               </section>
             )}
             
-            <section className="flex flex-col gap-4 pt-6 border-t">
+            <section className="flex flex-col gap-4 pt-6 border-t border-slate-200 dark:border-slate-700/50">
               <a 
                 href={scholarship.application_url || scholarship.source_url || '#'} 
                 target="_blank" 
                 rel="noreferrer"
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center text-lg"
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center text-lg"
               >
                 Go to Official Application
                 <ExternalLinkIcon size={20} className="ml-2" />
