@@ -9,13 +9,13 @@ interface StepDemographicProps {
 export function StepDemographic({ data, updateData }: StepDemographicProps) {
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-bold text-gray-800">Demographic Information</h2>
-      <p className="text-gray-500">This helps match you with specific diversity or regional scholarships.</p>
+      <h2 className="text-2xl font-bold text-gray-800 dark:text-white font-display">Demographic Information</h2>
+      <p className="text-gray-500 dark:text-slate-400">This helps match you with specific diversity or regional scholarships.</p>
       
       <div>
-        <label className="block text-sm font-medium text-gray-700">Nationality</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-slate-300">Nationality</label>
         <select 
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border bg-white"
+          className="mt-1 block w-full rounded-md border-gray-300 dark:border-slate-600 shadow-sm p-2 border bg-white dark:bg-slate-700 dark:text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none"
           value={data.nationality || ''}
           onChange={(e) => updateData({ nationality: e.target.value })}
         >
@@ -27,9 +27,9 @@ export function StepDemographic({ data, updateData }: StepDemographicProps) {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700">Country of Residence</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-slate-300">Country of Residence</label>
         <select 
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border bg-white"
+          className="mt-1 block w-full rounded-md border-gray-300 dark:border-slate-600 shadow-sm p-2 border bg-white dark:bg-slate-700 dark:text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none"
           value={data.country_of_residence || ''}
           onChange={(e) => updateData({ country_of_residence: e.target.value })}
         >
@@ -41,9 +41,9 @@ export function StepDemographic({ data, updateData }: StepDemographicProps) {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700">Gender (Optional)</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-slate-300">Gender (Optional)</label>
         <select 
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border"
+          className="mt-1 block w-full rounded-md border-gray-300 dark:border-slate-600 shadow-sm p-2 border bg-white dark:bg-slate-700 dark:text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none"
           value={data.gender || ''}
           onChange={(e) => updateData({ gender: e.target.value })}
         >
@@ -56,11 +56,11 @@ export function StepDemographic({ data, updateData }: StepDemographicProps) {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700">Disability Status (Optional)</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-slate-300">Disability Status (Optional)</label>
         <input 
           type="text" 
           placeholder="e.g. None"
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border"
+          className="mt-1 block w-full rounded-md border-gray-300 dark:border-slate-600 shadow-sm p-2 border bg-white dark:bg-slate-700 dark:text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
           value={data.disability || ''}
           onChange={(e) => updateData({ disability: e.target.value })}
         />

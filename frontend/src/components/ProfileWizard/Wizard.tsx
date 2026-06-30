@@ -81,24 +81,24 @@ export function Wizard() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto mt-10 p-8 bg-white rounded-xl shadow-lg border border-gray-100">
+    <div className="max-w-2xl mx-auto mt-10 p-8 bg-white dark:bg-slate-800/80 rounded-xl shadow-lg border border-gray-100 dark:border-slate-700/50">
       
       {/* Progress Bar */}
       <div className="mb-8 relative pt-1">
         <div className="flex mb-2 items-center justify-between">
           <div>
-            <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-blue-600 bg-blue-200">
+            <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-indigo-600 dark:text-indigo-400 bg-indigo-200 dark:bg-indigo-900/30">
               Step {step} of 4
             </span>
           </div>
         </div>
-        <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-blue-100">
-          <div style={{ width: `${(step / 4) * 100}%` }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-600 transition-all duration-300"></div>
+        <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-indigo-100 dark:bg-slate-700">
+          <div style={{ width: `${(step / 4) * 100}%` }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-indigo-600 transition-all duration-300"></div>
         </div>
       </div>
 
       {error && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-100 text-red-700 rounded-lg text-sm font-medium">
+        <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800/50 text-red-700 dark:text-red-400 rounded-lg text-sm font-medium">
           {error}
         </div>
       )}
@@ -108,11 +108,11 @@ export function Wizard() {
       {step === 3 && <StepFinancial data={data} updateData={updateData} />}
       {step === 4 && <StepExtracurriculars data={data} updateData={updateData} />}
 
-      <div className="mt-8 flex justify-between pt-4 border-t border-gray-100">
+      <div className="mt-8 flex justify-between pt-4 border-t border-gray-100 dark:border-slate-700/50">
         <button 
           onClick={prevStep}
           disabled={step === 1}
-          className={`px-6 py-2 rounded-lg font-medium transition-colors ${step === 1 ? 'text-gray-300 cursor-not-allowed' : 'text-gray-600 hover:bg-gray-100'}`}
+          className={`px-6 py-2 rounded-lg font-medium transition-colors ${step === 1 ? 'text-gray-300 dark:text-slate-600 cursor-not-allowed' : 'text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700'}`}
         >
           Back
         </button>
@@ -120,14 +120,14 @@ export function Wizard() {
         {step < 4 ? (
           <button 
             onClick={nextStep}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-2 rounded-lg font-medium transition-colors shadow-md shadow-blue-200"
+            className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-2 rounded-lg font-medium transition-colors shadow-md shadow-indigo-200 dark:shadow-none"
           >
             Next
           </button>
         ) : (
           <button 
             onClick={handleSubmit}
-            className="bg-green-600 hover:bg-green-700 text-white px-8 py-2 rounded-lg font-medium transition-colors shadow-md shadow-green-200"
+            className="bg-green-600 hover:bg-green-700 text-white px-8 py-2 rounded-lg font-medium transition-colors shadow-md shadow-green-200 dark:shadow-none"
           >
             Complete Profile
           </button>
