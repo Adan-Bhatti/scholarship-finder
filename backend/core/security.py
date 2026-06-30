@@ -19,6 +19,7 @@ def get_password_hash(password: str) -> str:
     return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 
 def create_access_token(subject: Union[str, Any], expires_delta: Optional[timedelta] = None) -> str:
+    """Create a new JWT access token."""
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta
     else:
@@ -29,6 +30,7 @@ def create_access_token(subject: Union[str, Any], expires_delta: Optional[timede
     return encoded_jwt
 
 def create_refresh_token(subject: Union[str, Any], expires_delta: Optional[timedelta] = None) -> str:
+    """Create a new JWT refresh token."""
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta
     else:
@@ -39,6 +41,7 @@ def create_refresh_token(subject: Union[str, Any], expires_delta: Optional[timed
     return encoded_jwt
 
 def create_reset_token(email: str) -> str:
+    """Create a short-lived JWT token for password resets."""
     expire = datetime.now(timezone.utc) + timedelta(minutes=15)
     to_encode = {"exp": expire, "sub": email, "type": "reset"}
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
