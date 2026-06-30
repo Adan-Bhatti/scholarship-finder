@@ -106,7 +106,7 @@ export function Explorer() {
   const hasActiveFilters = !!(params.q || params.degree || params.country || params.min_amount);
 
   return (
-    <div className="flex h-screen bg-slate-50 overflow-hidden">
+    <div className="flex h-screen bg-slate-50 dark:bg-slate-950 overflow-hidden">
       <Sidebar />
 
       <main className="flex-1 ml-64 overflow-y-auto">
@@ -114,13 +114,13 @@ export function Explorer() {
 
           <div className="mb-6 flex justify-between items-center">
             <div>
-              <h1 className="text-2xl font-bold text-slate-900 mb-0.5">Explore Scholarships</h1>
-              <p className="text-slate-500 text-sm">Search and filter through our global database of opportunities.</p>
+              <h1 className="text-2xl font-bold text-slate-900 dark:text-white font-display mb-0.5">Explore Scholarships</h1>
+              <p className="text-slate-500 dark:text-slate-400 text-sm">Search and filter through our global database of opportunities.</p>
             </div>
             <button
               onClick={handleRefreshFeed}
               disabled={loading}
-              className="flex items-center px-4 py-2 bg-white border border-slate-200 text-slate-700 font-medium rounded-xl shadow-sm hover:bg-slate-50 hover:shadow-md transition-all disabled:opacity-50 text-sm"
+              className="flex items-center px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 font-medium rounded-xl shadow-sm hover:bg-slate-50 dark:hover:bg-slate-700 hover:shadow-md transition-all disabled:opacity-50 text-sm"
             >
               <RefreshCwIcon size={14} className={`mr-2 ${loading ? 'animate-spin' : ''}`} />
               Refresh
@@ -135,7 +135,7 @@ export function Explorer() {
               ref={searchInputRef}
               type="text"
               placeholder="Search by keyword, provider, or title... (Ctrl+K)"
-              className="block w-full pl-11 pr-10 py-3.5 rounded-2xl shadow-sm text-slate-900 bg-white border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-sm transition-all hover:shadow-md outline-none"
+              className="block w-full pl-11 pr-10 py-3.5 rounded-2xl shadow-sm text-slate-900 dark:text-white bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-indigo-500 dark:focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:focus:ring-indigo-500/20 text-sm transition-all hover:shadow-md outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -144,7 +144,7 @@ export function Explorer() {
                 onClick={() => setSearchTerm('')}
                 className="absolute inset-y-0 right-0 pr-4 flex items-center"
               >
-                <XIcon className="h-4 w-4 text-slate-400 hover:text-slate-600" />
+                <XIcon className="h-4 w-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300" />
               </button>
             )}
           </div>
@@ -153,30 +153,30 @@ export function Explorer() {
           {hasActiveFilters && (
             <div className="flex flex-wrap gap-2 mb-4">
               {params.degree && (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded-full border border-blue-100">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-xs font-semibold rounded-full border border-blue-100 dark:border-blue-800/50">
                   🎓 {params.degree}
-                  <button onClick={() => handleFilterChange('degree', undefined)} className="hover:text-blue-900"><XIcon size={10} /></button>
+                  <button onClick={() => handleFilterChange('degree', undefined)} className="hover:text-blue-900 dark:hover:text-blue-200"><XIcon size={10} /></button>
                 </span>
               )}
               {params.country && (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-full border border-emerald-100">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-xs font-semibold rounded-full border border-emerald-100 dark:border-emerald-800/50">
                   🌍 {params.country}
-                  <button onClick={() => handleFilterChange('country', undefined)} className="hover:text-emerald-900"><XIcon size={10} /></button>
+                  <button onClick={() => handleFilterChange('country', undefined)} className="hover:text-emerald-900 dark:hover:text-emerald-200"><XIcon size={10} /></button>
                 </span>
               )}
               {params.field && (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-purple-50 text-purple-700 text-xs font-semibold rounded-full border border-purple-100">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 text-xs font-semibold rounded-full border border-purple-100 dark:border-purple-800/50">
                   📚 {params.field}
-                  <button onClick={() => handleFilterChange('field', undefined)} className="hover:text-purple-900"><XIcon size={10} /></button>
+                  <button onClick={() => handleFilterChange('field', undefined)} className="hover:text-purple-900 dark:hover:text-purple-200"><XIcon size={10} /></button>
                 </span>
               )}
               {params.min_amount && (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-50 text-amber-700 text-xs font-semibold rounded-full border border-amber-100">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 text-xs font-semibold rounded-full border border-amber-100 dark:border-amber-800/50">
                   💰 Min ${params.min_amount.toLocaleString()}
-                  <button onClick={() => handleFilterChange('min_amount', undefined)} className="hover:text-amber-900"><XIcon size={10} /></button>
+                  <button onClick={() => handleFilterChange('min_amount', undefined)} className="hover:text-amber-900 dark:hover:text-amber-200"><XIcon size={10} /></button>
                 </span>
               )}
-              <button onClick={handleClearFilters} className="text-xs text-slate-400 hover:text-slate-600 font-medium px-2">
+              <button onClick={handleClearFilters} className="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 font-medium px-2">
                 Clear all
               </button>
             </div>
@@ -185,18 +185,18 @@ export function Explorer() {
           <div className="flex flex-col lg:flex-row gap-6">
 
             <div className="w-full lg:w-64 flex-shrink-0">
-              <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 sticky top-6">
+              <div className="bg-white dark:bg-slate-800/70 p-5 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700/50 sticky top-6">
                 <div className="flex items-center justify-between mb-4">
                   <button
                     onClick={() => setFiltersOpen(!filtersOpen)}
-                    className="font-semibold text-gray-900 flex items-center text-sm"
+                    className="font-semibold text-gray-900 dark:text-white flex items-center text-sm"
                   >
                     <FilterIcon size={16} className="mr-2" />
                     Filters
                     <ChevronDownIcon size={14} className={`ml-1 transition-transform ${filtersOpen ? 'rotate-180' : ''}`} />
                   </button>
                   {hasActiveFilters && (
-                    <button onClick={handleClearFilters} className="text-xs text-blue-600 hover:text-blue-800 font-medium">
+                    <button onClick={handleClearFilters} className="text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 font-medium">
                       Clear all
                     </button>
                   )}
@@ -205,9 +205,9 @@ export function Explorer() {
                 {filtersOpen && (
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Degree Level</label>
+                      <label className="block text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Degree Level</label>
                       <select
-                        className="w-full border border-gray-200 rounded-lg bg-slate-50 p-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                        className="w-full border border-gray-200 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-700/50 p-2 text-sm text-slate-900 dark:text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none"
                         value={params.degree || ''}
                         onChange={(e) => handleFilterChange('degree', e.target.value || undefined)}
                       >
@@ -219,9 +219,9 @@ export function Explorer() {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Destination Country</label>
+                      <label className="block text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Destination Country</label>
                       <select
-                        className="w-full border border-gray-200 rounded-lg bg-slate-50 p-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                        className="w-full border border-gray-200 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-700/50 p-2 text-sm text-slate-900 dark:text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none"
                         value={params.country || ''}
                         onChange={(e) => handleFilterChange('country', e.target.value || undefined)}
                       >
@@ -231,9 +231,9 @@ export function Explorer() {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Field of Study</label>
+                      <label className="block text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Field of Study</label>
                       <select
-                        className="w-full border border-gray-200 rounded-lg bg-slate-50 p-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                        className="w-full border border-gray-200 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-700/50 p-2 text-sm text-slate-900 dark:text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none"
                         value={params.field || ''}
                         onChange={(e) => handleFilterChange('field', e.target.value || undefined)}
                       >
@@ -243,11 +243,11 @@ export function Explorer() {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Min Award (USD)</label>
+                      <label className="block text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Min Award (USD)</label>
                       <input
                         type="number"
                         placeholder="e.g. 5000"
-                        className="w-full border border-gray-200 rounded-lg bg-slate-50 p-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                        className="w-full border border-gray-200 dark:border-slate-600 rounded-lg bg-slate-50 dark:bg-slate-700/50 p-2 text-sm text-slate-900 dark:text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none"
                         value={params.min_amount || ''}
                         onChange={(e) => handleFilterChange('min_amount', e.target.value ? Number(e.target.value) : undefined)}
                         onWheel={(e) => e.currentTarget.blur()}
@@ -266,15 +266,15 @@ export function Explorer() {
               </div>
 
               {data.length === 0 && !loading ? (
-                <div className="flex-1 flex flex-col items-center justify-center bg-white rounded-2xl border border-dashed border-slate-200 p-12 text-center">
-                  <div className="w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center mb-4 text-3xl">
+                <div className="flex-1 flex flex-col items-center justify-center bg-white dark:bg-slate-800/60 rounded-2xl border border-dashed border-slate-200 dark:border-slate-700/50 p-12 text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-slate-50 dark:bg-slate-700 flex items-center justify-center mb-4 text-3xl">
                     🔍
                   </div>
-                  <h3 className="text-base font-semibold text-slate-900 mb-1">No scholarships found</h3>
-                  <p className="text-slate-400 text-sm mb-5">Try adjusting your search terms or removing some filters.</p>
+                  <h3 className="text-base font-semibold text-slate-900 dark:text-white mb-1">No scholarships found</h3>
+                  <p className="text-slate-400 dark:text-slate-500 text-sm mb-5">Try adjusting your search terms or removing some filters.</p>
                   <button
                     onClick={handleClearFilters}
-                    className="px-5 py-2 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors shadow-sm"
+                    className="px-5 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-xl hover:bg-indigo-700 transition-colors shadow-sm"
                   >
                     Clear all filters
                   </button>
