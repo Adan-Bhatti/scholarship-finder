@@ -48,7 +48,8 @@ class HECSpider(BaseScholarshipSpider):
             else:
                 yield response.follow(link, callback=self.parse_detail)
 
-    def parse_detail(self, response):
+    def parse_detail(self, response: scrapy.http.Response):
+        """Parse individual scholarship detail pages."""
         title = response.css("h1::text, .page-title::text").get(default="HEC Scholarship").strip()
         description_parts = response.css(".content-body p::text, main p::text").getall()
         description = " ".join(description_parts[:3]).strip()
