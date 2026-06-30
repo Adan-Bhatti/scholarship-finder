@@ -47,6 +47,19 @@ function SkeletonCard() {
   );
 }
 
+// --- Skeleton stat card ---
+function SkeletonStatCard() {
+  return (
+    <div className="bg-white dark:bg-slate-800/60 rounded-2xl border border-slate-100 dark:border-slate-700/50 p-5 flex items-center gap-4 animate-pulse">
+      <div className="h-12 w-12 bg-slate-200 dark:bg-slate-700 rounded-xl" />
+      <div className="flex-1">
+        <div className="h-3 bg-slate-200 dark:bg-slate-700 rounded w-20 mb-2" />
+        <div className="h-6 bg-slate-200 dark:bg-slate-700 rounded w-16" />
+      </div>
+    </div>
+  );
+}
+
 // --- Stat card with animated counter ---
 function StatCard({ icon, label, value, color, darkColor, prefix = '', suffix = '' }: {
   icon: React.ReactNode; label: string; value: number;
@@ -149,7 +162,11 @@ export function Dashboard() {
           </div>
 
           {/* Stats */}
-          {stats && (
+          {loading ? (
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+              {[1, 2, 3, 4].map(i => <SkeletonStatCard key={i} />)}
+            </div>
+          ) : stats && (
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
               <StatCard
                 icon={<TargetIcon className="text-blue-600 dark:text-blue-400" size={20} />}
