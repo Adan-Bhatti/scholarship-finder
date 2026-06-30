@@ -335,21 +335,7 @@ class ScholarshipMatcher:
                 if not _nationality_matches(profile.nationality, s.eligible_nationalities):
                     continue
 
-            # ── Hard disqualification: Destination Countries ───────
-            if s.eligible_countries:
-                countries_lower = [c.lower().strip() for c in s.eligible_countries]
-                if not any(c in ("any", "all", "global", "worldwide", "international")
-                           for c in countries_lower):
-                    user_countries = []
-                    if profile.country_of_residence:
-                        user_countries.append(profile.country_of_residence.lower().strip())
-                    if profile.target_destinations:
-                        user_countries.extend(
-                            [d.lower().strip() for d in profile.target_destinations if d]
-                        )
-                    if user_countries:
-                        if not any(uc in countries_lower for uc in user_countries):
-                            continue
+            # Destination countries now only affect scoring, not hard disqualification.
 
             # ── Hard disqualification: Degree Level ───────────────
             if s.degree_levels:
@@ -360,25 +346,10 @@ class ScholarshipMatcher:
                             continue
 
             score = cls.calculate_score(profile, s)
-            if score > 20.0:
+            if score >= 10.0:
                 results.append((s, score))
 
         # Sort by score descending
         results.sort(key=lambda x: x[1], reverse=True)
 
-        # Filter by max_sources limit (unique sources)
-        max_sources = getattr(profile, "max_sources", 5)
-        if max_sources is None:
-            max_sources = 5
-
-        allowed_sources: set = set()
-        filtered_results = []
-        for s, score in results:
-            source = s.source_name or "Unknown"
-            if source in allowed_sources:
-                filtered_results.append((s, score))
-            elif len(allowed_sources) < max_sources:
-                allowed_sources.add(source)
-                filtered_results.append((s, score))
-
-        return filtered_results
+        return results
