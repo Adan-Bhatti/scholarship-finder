@@ -13,7 +13,7 @@
     <img src="https://img.shields.io/badge/react-19-61DAFB?logo=react" alt="React">
     <img src="https://img.shields.io/badge/fastapi-0.115-009688?logo=fastapi" alt="FastAPI">
     <img src="https://img.shields.io/badge/PostgreSQL-15-336791?logo=postgresql" alt="PostgreSQL">
-    <img src="https://img.shields.io/badge/AI-Claude%203-orange" alt="Claude">
+    <img src="https://img.shields.io/badge/AI-Groq%20%2F%20Llama--3-orange" alt="Groq">
   </p>
 </div>
 
@@ -37,13 +37,16 @@
 
 | Feature | Description |
 |---|---|
-| 🕷️ **Automated Web Scraping** | Scrapy + Playwright spiders crawl 8+ scholarship databases on a nightly Celery beat schedule |
-| 🤖 **AI Match Explainer** | Anthropic Claude 3 generates a custom 2-3 sentence fit analysis + 5-step checklist per scholarship |
-| 🔍 **Scholarship Explorer** | Real-time debounced search to filter scholarships by country, degree, keyword, and amount |
+| 🕷️ **Automated Web Scraping** | 29+ scholarship scrapers run on a nightly APScheduler schedule using httpx + BeautifulSoup |
+| 🔍 **Producer-Consumer Discovery** | Background producer discovers new scholarship websites via DuckDuckGo; consumer scrapes and indexes them automatically |
+| 🤖 **AI Match Explainer** | Groq Llama-3 generates a custom 2-3 sentence fit analysis + 5-step checklist per scholarship |
+| 💬 **AI Chat Assistant** | RAG-powered chatbot answers scholarship questions using your profile as context |
+| 🔍 **Scholarship Explorer** | Real-time debounced search to filter by country, degree, keyword, and amount |
 | 📊 **Analytics Dashboard** | Live stats: total matches, expiring deadlines, and total potential funding |
 | 📋 **Kanban Application Tracker** | Drag-and-drop board to move scholarships through `Saved → Drafting → Submitted → Won/Rejected` |
-| 🔐 **JWT Authentication** | Secure register/login with hashed passwords and Bearer token auth |
+| 🔐 **JWT Authentication** | Secure register/login with hashed passwords, refresh tokens, and Bearer auth |
 | 🧙 **Onboarding Wizard** | Multi-step profile builder collecting academic, financial, and demographic data |
+| 📄 **Resume Parser** | Upload your PDF resume — AI extracts your degree, GPA, and field automatically |
 | 🐳 **Docker Ready** | One-command `docker-compose up` spins up the full stack |
 
 ---
@@ -63,29 +66,32 @@
 │   │  Auth Router │  │  Match Router   │ │
 │   ├──────────────┤  ├─────────────────┤ │
 │   │  AI Router   │  │Dashboard Router │ │
+│   ├──────────────┤  ├─────────────────┤ │
+│   │Sources Router│  │ Scraper Router  │ │
 │   └──────────────┘  └─────────────────┘ │
 │              SQLAlchemy ORM             │
 └──────────────┬───────────────────────────┘
                │
-    ┌──────────┴──────────┐
-    ▼                     ▼
-┌──────────┐        ┌──────────┐
-│PostgreSQL│        │  Redis   │
-│(Data)    │        │(Broker)  │
-└──────────┘        └────┬─────┘
-                         │
-                    ┌────▼──────┐
-                    │  Celery   │
-                    │  Worker   │
-                    │           │
-                    │  Scrapy   │
-                    │  Spiders  │
-                    └───────────┘
-                         │
-          ┌──────────────┼──────────────┐
-          ▼              ▼              ▼
-      Chevening      Fulbright        DAAD
-      Bold.org      FastWeb     Scholarships.com
+    ┌──────────┴──────────────────┐
+    ▼                             ▼
+┌──────────┐           ┌─────────────────────┐
+│PostgreSQL│           │   APScheduler       │
+│(Data)    │           │  Background Jobs    │
+└──────────┘           └──────────┬──────────┘
+                                  │
+              ┌───────────────────┼──────────────────┐
+              ▼                   ▼                  ▼
+     ┌─────────────┐    ┌──────────────┐   ┌───────────────┐
+     │  Scraper    │    │  Producer    │   │   Consumer    │
+     │ (29+ sites) │    │  Discovery   │   │  Dynamic      │
+     │ httpx+BS4   │    │ DuckDuckGo   │   │  Scraper      │
+     └─────────────┘    └──────────────┘   └───────────────┘
+              │                   │
+     ┌────────┴────────┐          │ scraper_sources table
+     ▼         ▼       ▼          ▼
+ Chevening  Fulbright  DAAD   [New Sources]
+ Erasmus    Gates      MEXT   [Auto-discovered]
+ HEC        KGSP      +22 more
 ```
 
 ---
@@ -94,12 +100,12 @@
 
 | Layer | Technology |
 |---|---|
-| **Frontend** | React 19, TypeScript, Vite, Tailwind CSS, Lucide Icons |
+| **Frontend** | React 19, TypeScript, Vite, Tailwind CSS v4, Lucide Icons, Framer Motion |
 | **Backend** | Python 3.10+, FastAPI, Pydantic v2, SQLAlchemy 2 |
-| **Database** | PostgreSQL 15, Alembic (schema migrations) |
-| **Task Queue** | Celery 5, Redis 7 (broker + result backend) |
-| **Web Scraping** | Scrapy, Playwright (JS-rendering) |
-| **AI / LLM** | Anthropic Claude 3 (claude-3-haiku) |
+| **Database** | PostgreSQL 15 (prod) / SQLite (dev), Alembic (schema migrations) |
+| **Scheduler** | APScheduler (background jobs — scraper, reminders, discovery) |
+| **Web Scraping** | httpx + BeautifulSoup4 (lightweight, no Playwright required) |
+| **AI / LLM** | Groq API (llama-3.3-70b-versatile) |
 | **Auth** | JWT (python-jose), bcrypt |
 | **DevOps** | Docker, Docker Compose, GitHub Actions CI |
 
@@ -108,10 +114,10 @@
 ## 🚀 Quick Start
 
 ### Prerequisites
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) — to run PostgreSQL and Redis
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) — to run PostgreSQL
 - [Node.js 20+](https://nodejs.org/) — for the frontend
 - [Python 3.10+](https://www.python.org/)
-- An [Anthropic API Key](https://console.anthropic.com/) for the AI Explainer
+- A free [Groq API Key](https://console.groq.com/keys) for the AI Explainer & Chat
 
 ### 1. Clone the repo
 ```bash
@@ -119,9 +125,9 @@ git clone https://github.com/Adan-Bhatti/scholarship-finder.git
 cd scholarship-finder
 ```
 
-### 2. Start the database and Redis
+### 2. Start the database
 ```bash
-docker compose up -d postgres redis
+docker compose up -d postgres
 ```
 
 ### 3. Configure the backend
@@ -133,7 +139,7 @@ pip install -r requirements.txt
 
 # Copy the example environment file and fill in your values
 cp .env.example .env
-# Edit .env with your ANTHROPIC_API_KEY and database credentials
+# Edit .env — add your GROQ_API_KEY and database credentials
 
 # Apply database migrations
 alembic upgrade head
@@ -157,12 +163,12 @@ npm run dev
 # App is now available at http://localhost:5173
 ```
 
-### 6. (Optional) Run the background scraper worker
+### 6. (Optional) Trigger the scraper manually
+The scraper runs automatically every 24h via APScheduler once the backend starts.
+You can also trigger it from the Admin panel → "Run Scraper Now", or via:
 ```bash
 cd backend
-celery -A backend.celery_app worker --loglevel=info
-# Schedule (runs spiders nightly at midnight UTC):
-celery -A backend.celery_app beat --loglevel=info
+python -m backend.scraper.http_runner
 ```
 
 > **Tip:** Use `make dev` to run steps 2–5 together if you have `make` installed. See the [Makefile](Makefile).
@@ -175,14 +181,12 @@ Copy [`backend/.env.example`](backend/.env.example) to `backend/.env` and config
 
 | Variable | Required | Description |
 |---|---|---|
-| `DATABASE_URL` | ✅ | PostgreSQL connection string |
-| `REDIS_URL` | ✅ | Redis connection string |
-| `CELERY_BROKER_URL` | ✅ | Celery broker URL (usually same as Redis) |
-| `CELERY_RESULT_BACKEND` | ✅ | Celery result backend URL |
+| `DATABASE_URL` | ✅ | PostgreSQL connection string (or `sqlite:///./scholarships.db` for local dev) |
 | `SECRET_KEY` | ✅ | Random secret string for JWT signing |
 | `ALGORITHM` | ✅ | JWT algorithm, e.g. `HS256` |
 | `ACCESS_TOKEN_EXPIRE_MINUTES` | ✅ | Token lifetime in minutes |
-| `ANTHROPIC_API_KEY` | ⚠️ | Required for the AI Explainer feature. Without it, a mock response is returned. |
+| `GROQ_API_KEY` | ⚠️ | Required for AI Explainer & Chat. Free key at [console.groq.com](https://console.groq.com/keys) |
+| `DUCKDUCKGO_MAX_RESULTS` | Optional | Max results per discovery query (default: 10) |
 
 ---
 
@@ -198,13 +202,19 @@ scholarship-finder/
 │   ├── alembic/                 # Database migration scripts
 │   ├── core/                    # Config, exceptions, matching engine
 │   ├── models/                  # SQLAlchemy ORM models
+│   │   ├── scholarship.py       # Scholarship data model
+│   │   ├── profile.py           # User profile model
+│   │   ├── saved.py             # Saved scholarships model
+│   │   └── scraper_source.py    # Discovered sources queue model
 │   ├── routers/                 # FastAPI route handlers
+│   │   └── sources.py           # Source discovery admin API
 │   ├── schemas/                 # Pydantic request/response schemas
-│   ├── scraper/                 # Scrapy project
-│   │   ├── spiders/             # Individual website spiders
-│   │   └── pipelines/           # Dedup and DB pipeline
+│   ├── scraper/                 # Scraping engine
+│   │   ├── http_runner.py       # 29+ scholarship scrapers (httpx + BS4)
+│   │   ├── source_discovery.py  # Producer: DuckDuckGo source finder
+│   │   └── dynamic_scraper.py   # Consumer: generic site scraper
 │   ├── services/                # Business logic (AI service)
-│   ├── tasks/                   # Celery task definitions
+│   ├── tasks/                   # Background task definitions
 │   ├── tests/                   # Pytest test suite
 │   ├── .env.example             # Environment variable template
 │   ├── Dockerfile
@@ -240,12 +250,18 @@ The API is fully documented via Swagger UI. Run the backend and visit `http://lo
 |---|---|---|---|
 | `POST` | `/auth/register` | ❌ | Register a new user |
 | `POST` | `/auth/login` | ❌ | Login and get a JWT token |
-| `GET/PUT` | `/profile/me` | ✅ | Get or update your academic profile |
+| `POST` | `/auth/refresh` | ❌ | Refresh access token |
+| `GET/PATCH` | `/profile` | ✅ | Get or update your academic profile |
+| `POST` | `/profile/upload-resume` | ✅ | Upload PDF resume for AI parsing |
 | `GET` | `/scholarships/matches` | ✅ | Get AI-ranked scholarship matches |
-| `GET` | `/match/explain/{id}` | ✅ | Get Claude AI explanation for a scholarship |
+| `GET` | `/scholarships/search` | ✅ | Full-text search with filters |
+| `POST` | `/scholarships/{id}/save` | ✅ | Save a scholarship to tracker |
+| `GET` | `/match/explain/{id}` | ✅ | Get Groq AI explanation for a scholarship |
+| `POST` | `/match/chat` | ✅ | Chat with AI scholarship advisor |
 | `GET` | `/dashboard/stats` | ✅ | Get your personal dashboard statistics |
-| `GET` | `/scholarships/saved` | ✅ | Get your Kanban board items |
-| `PATCH` | `/scholarships/{id}/saved` | ✅ | Update status/notes on a saved item |
+| `GET` | `/sources` | ✅ | List auto-discovered scholarship sources |
+| `POST` | `/sources/trigger-discovery` | ✅ | Manually run the source discovery producer |
+| `POST` | `/scraper/run` | ✅ | Manually trigger the scholarship scraper |
 
 ---
 
@@ -255,13 +271,14 @@ The API is fully documented via Swagger UI. Run the backend and visit `http://lo
 ```bash
 cd backend
 source venv/bin/activate
-pytest tests/ -v --cov=backend --cov-report=term-missing
+pytest tests/ -v --tb=short
 ```
 
-**Frontend (vitest):**
+**Frontend (TypeScript type-check):**
 ```bash
 cd frontend
-npm run test
+npx tsc --noEmit
+npm run build
 ```
 
 ---
