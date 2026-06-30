@@ -3,5 +3,6 @@ from .profile import Profile
 from .scholarship import Scholarship
 from .saved import SavedScholarship
 from .scrape_log import ScrapeLog
+from .scraper_source import ScraperSource
 
 # Make sure all models are imported here for Alembic
