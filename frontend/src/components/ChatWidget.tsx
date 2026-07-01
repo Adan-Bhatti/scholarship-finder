@@ -98,7 +98,7 @@ export function ChatWidget() {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 p-4 bg-gradient-to-br from-blue-600 to-indigo-600 text-white rounded-2xl shadow-2xl shadow-blue-500/30 hover:shadow-blue-500/50 hover:scale-105 transition-all z-50 flex items-center justify-center group"
+          className="fixed bottom-20 md:bottom-6 right-4 md:right-6 p-4 bg-gradient-to-br from-blue-600 to-indigo-600 text-white rounded-2xl shadow-2xl shadow-blue-500/30 hover:shadow-blue-500/50 hover:scale-105 transition-all z-50 flex items-center justify-center group"
           aria-label="Open AI Chat"
         >
           <SparklesIcon size={22} className="group-hover:rotate-12 transition-transform" />
@@ -109,8 +109,8 @@ export function ChatWidget() {
 
       {/* Chat panel */}
       {isOpen && (
-        <div className="fixed bottom-6 right-6 w-[360px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/50 rounded-3xl shadow-2xl flex flex-col overflow-hidden z-50"
-          style={{ maxHeight: 'calc(100vh - 5rem)' }}>
+        <div className="fixed bottom-20 md:bottom-6 right-4 md:right-6 w-[calc(100vw-2rem)] sm:w-[360px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/50 rounded-3xl shadow-2xl flex flex-col overflow-hidden z-50"
+          style={{ maxHeight: 'calc(100vh - 6rem)' }}>
           {/* Header */}
           <div className="bg-gradient-to-r from-indigo-600 to-purple-600 px-5 py-4 flex justify-between items-center">
             <div className="flex items-center gap-2.5">
