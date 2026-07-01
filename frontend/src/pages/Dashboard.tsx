@@ -141,7 +141,7 @@ export function Dashboard() {
     <div className="min-h-screen bg-slate-50 flex dark:bg-slate-950">
       <Sidebar />
 
-      <main className="flex-1 ml-64 p-8">
+      <main className="flex-1 md:ml-64 p-4 sm:p-8 pb-24 md:pb-8">
         <div className="max-w-6xl mx-auto">
           <div className="mb-8 flex justify-between items-center">
             <div>
