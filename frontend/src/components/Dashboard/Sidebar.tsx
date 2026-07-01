@@ -129,19 +129,19 @@ export function Sidebar() {
 
       {/* Mobile Bottom Navigation */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 z-50 px-6 py-3 flex justify-between items-center shadow-[0_-10px_40px_rgba(0,0,0,0.05)] dark:shadow-[0_-10px_40px_rgba(0,0,0,0.2)]">
-        <Link to="/dashboard" className="text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 flex flex-col items-center gap-1">
+        <Link to="/dashboard" className={`flex flex-col items-center gap-1 transition-colors ${location.pathname === '/dashboard' ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400'}`}>
           <HomeIcon size={20} />
           <span className="text-[10px] font-medium">Home</span>
         </Link>
-        <Link to="/explore" className="text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 flex flex-col items-center gap-1">
+        <Link to="/explore" className={`flex flex-col items-center gap-1 transition-colors ${location.pathname === '/explore' ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400'}`}>
           <SearchIcon size={20} />
           <span className="text-[10px] font-medium">Explore</span>
         </Link>
-        <Link to="/saved" className="text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 flex flex-col items-center gap-1">
+        <Link to="/saved" className={`flex flex-col items-center gap-1 transition-colors ${location.pathname === '/saved' ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400'}`}>
           <BookmarkIcon size={20} />
           <span className="text-[10px] font-medium">Saved</span>
         </Link>
-        <Link to="/profile" className="text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 flex flex-col items-center gap-1">
+        <Link to="/profile" className={`flex flex-col items-center gap-1 transition-colors ${location.pathname === '/profile' ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400'}`}>
           <UserIcon size={20} />
           <span className="text-[10px] font-medium">Profile</span>
         </Link>
