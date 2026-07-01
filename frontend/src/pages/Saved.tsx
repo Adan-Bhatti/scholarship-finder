@@ -122,7 +122,7 @@ export function Saved() {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex">
       <Sidebar />
-      <main className="flex-1 ml-64 p-8 overflow-x-auto">
+      <main className="flex-1 md:ml-64 p-4 sm:p-8 pb-24 md:pb-8 overflow-x-auto">
         <div className="min-w-max">
           <div className="mb-8">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white font-display">Application Tracker</h2>
